@@ -119,8 +119,13 @@ router.post('/', async (req, res) => {
         // Handle errors
     });*/
 
+    console.log( req);
+
     let orderList = req.body.productOrders;
-    let user = await User.findById(req.body.id)
+    let user="60ef0636cda95ec7be91a035"
+    if(req.body.id){
+        let user = await User.findById(req.body.id)
+    }
     /* name: name,
             country: country,
             city: city,
@@ -129,7 +134,7 @@ router.post('/', async (req, res) => {
             id: user.userid,
             currency: currency.currencySymbol*/
     let mainOrder = {
-        products: [], user, paymentStatus: null, isPayed: false, deliveryStatus: false, currency: req.body.currency,
+        products: [], paymentStatus: null, isPayed: false, deliveryStatus: false, currency: req.body.currency,
         country: req.body.country, name: req.body.name, city: req.body.city,amount:req.body.amount
     };
     let order = new Order(mainOrder);
@@ -168,7 +173,6 @@ router.post('/', async (req, res) => {
             product.variation[variationIndex].size[productSizeVariation].stock = 0;
 
         }
-        console.log("productRef", productId)
         let totalPrice = ((product.price - product.salePrice) * validQuantity);
         totalAmount += totalPrice;
         mainOrder.products.push({
@@ -196,7 +200,7 @@ router.post('/', async (req, res) => {
     // mainOrder.totalAmount=mainOrder;
     // console.log(mainOrder.totalAmount)
     mainOrder._id = order._id;
-    console.log(order._id)
+    console.log("product order",order._id)
     // sendEmail('Title', JSON.stringify({...order}).toString(),'tclarencek@gmail.com')
     res.status(200).send(mainOrder)
 //

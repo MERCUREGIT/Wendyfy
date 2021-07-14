@@ -11,7 +11,6 @@ import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import Rating from "../../components/product/sub-components/ProductRating";
-import {routes} from "../../config/routes";
 import {multilanguage} from "redux-multilanguage";
 
 const Compare = ({

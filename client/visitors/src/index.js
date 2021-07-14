@@ -12,6 +12,7 @@ import { fetchSlider } from "./redux/actions/sliderActions";
 import rootReducer from "./redux/reducers/rootReducer";
 import products from "./data/products.json";
 import App from "./App";
+import ErrorBoundary  from  './ErrorBoundary'
 import "./assets/scss/style.scss";
 import "./assets/css/style.css";
 import * as serviceWorker from "./serviceWorker";
@@ -34,7 +35,9 @@ store.dispatch(fetchSlider());
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </Provider>,
   document.getElementById("root")
 );

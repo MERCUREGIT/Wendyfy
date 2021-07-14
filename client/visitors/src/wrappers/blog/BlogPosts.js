@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import {routes} from "../../config/routes"
+// import {routes} from "../../config/routes"
 import {multilanguage} from "redux-multilanguage/index";
 const BlogPosts = ({ post,strings }) => {
   return (

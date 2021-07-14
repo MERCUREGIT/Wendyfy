@@ -13,7 +13,7 @@ import {routes} from '../../config/routes'
 import {multilanguage} from "redux-multilanguage";
 import LoadingOverlay from 'react-loading-overlay';
 import {deleteAllFromCart} from "../../redux/actions/cartActions";
-import {useToasts} from "react-toast-notifications";
+// import {useToasts} from "react-toast-notifications";
 import { ToastContainer, toast } from 'react-toastify';
 const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCart}) => {
     let addToast=toast.error
@@ -24,10 +24,11 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
     const [name, handleName] = useState(user.username !== "" ? user.username : "");
     const [country, handleCountry] = useState('');
     const [city, handleCity] = useState('');
-    const [paymentDetails, handlePaymentDetails] = useState({});
+    const paymentDetails = {};
     const [isLoading, setIsLoading] = useState(false);
     const [order, setOrder] = useState({});
-    const [error, setError] = useState(false)
+    const error = false;
+    
     let CinetPay = window.CinetPay;
 
     const handlePayment = async () => {
@@ -48,7 +49,7 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             return;
         }
         setIsLoading(true)
-        let result = await axios.post(`${routes.server}/order/`, {
+        let payload =  {
             name: name,
             country: country,
             city: city,
@@ -57,7 +58,16 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             id: user.userid,
             currency: currency.currencySymbol,
             amount: cartTotalPrice.toFixed(2)
-        }).then(r => {
+        };
+        let axiosConfig = {
+            headers: {
+                'Content-Type' : 'application/json',
+                "Access-Control-Allow-Origin": "*",
+          
+            }
+          };
+
+        axios.post(`${routes.server}/order/`, JSON.stringify(payload), axiosConfig).then(r => {
             setOrder(r.data)
             CinetPay.setSignatureData({
                 amount: parseInt(document.getElementById('amount').value),
@@ -65,15 +75,15 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                 currency: document.getElementById('currency').value,
                 designation: document.getElementById('designation').value,
                 custom: document.getElementById('cpm_custom').value,
-                // cel_phone_num: '696076817',
+                // cel_phone_num: '697835780',
                 cpm_phone_prefixe:'237'
             });
             CinetPay.getSignature();
         }).catch(e => {
             setIsLoading(false)
-            deleteAllFromCart(false)
-            history.push("/my-account")
+            // deleteAllFromCart(false)
             addToast(strings['subs_connection_error'])
+            history.push("/checkout")
         }).finally(e => {
         });
     }
@@ -90,18 +100,25 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
 
         CinetPay.on('error', function (e) {
             setIsLoading(false)
-            deleteAllFromCart(false)
-            history.push("/my-account")
-            addToast(strings['subs_connection_error'] + e.code + ',' + e.message)
+            // deleteAllFromCart(false)
+            // history.push("/my-account")
+            addToast(strings['subs_connection_error'] + "Errore code :"+ e.code +"Message :" + e.message )
+            // addToast(strings['subs_connection_error'] + e.code + ',' + e.message)
         });
         CinetPay.on('paymentPending', function (e) {
-
+            
+            addToast(strings['subs_connection_error'] + 'code:' + e.code + 'Message::' + e.message )
+            console.log("payment pending")
+            
         });
-        CinetPay.on('signatureCreated', function () {})
+        CinetPay.on('signatureCreated', function () {
+          
+            console.log("payment pending")
+        })
         CinetPay.on('paymentSuccessfull', function (paymentInfo) {
             if(typeof paymentInfo.lastTime != 'undefined'){
                 // result_div.innerHTML = '';
-                if(paymentInfo.cpm_result == '00'){
+                if(paymentInfo.cpm_result === '00'){
                     toast.success(strings['payment_completed'])
                     deleteAllFromCart(false)
                     history.push("/my-account")

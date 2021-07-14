@@ -43,7 +43,24 @@ build/Release
 node_modules/
 jspm_packages/
 
+client/admin/node_modules 
+client/admin/public
+client/admin/src
+client/admin/package-lock.json
+client/admin/package.json
+client/admin/README.md
+client/admin/toshiba_ssh_key
+client/admin/toshiba_ssh_key.pub
+client/admin/vue.config.js
 
+
+client/visitors/node_modules 
+client/visitors/public
+client/visitors/src
+client/visitors/package-lock.json
+client/visitors/package.json
+client/visitors/README.md
+client/visitors/test
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/

@@ -6,7 +6,7 @@ import MenuCart from "./sub-components/MenuCart";
 import { deleteFromCart } from "../../redux/actions/cartActions";
 import { logout } from "../../redux/actions/authenticationAction";
 import { multilanguage } from "redux-multilanguage";
-import {routes} from '../../config/routes'
+// import {routes} from '../../config/routes'
 import uuid from 'uuid/v4'
 const IconGroup = ({
   handleFilterList,

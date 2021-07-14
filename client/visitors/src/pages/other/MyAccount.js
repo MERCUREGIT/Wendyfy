@@ -1,4 +1,4 @@
-import PropTypes, {string} from "prop-types";
+import PropTypes from "prop-types";
 import React, {Fragment, useEffect, useState} from "react";
 import MetaTags from "react-meta-tags";
 import {BreadcrumbsItem} from "react-breadcrumbs-dynamic";
@@ -12,7 +12,7 @@ import {multilanguage} from "redux-multilanguage";
 import {routes} from "../../config/routes";
 import axios from 'axios';
 import {Button} from "react-bootstrap";
-import {toast} from "react-toastify";
+// import {toast} from "react-toastify";
 import {ToastContainer, toast as t2} from 'react-toastify';
 
 const MyAccount = ({location, authentication, strings}) => {
@@ -125,55 +125,55 @@ const AccountUserProfile = ({authentication, strings}) => {
 }
 
 const UserOrders = ({authentication, strings}) => {
-    const [loading, setLoading] = useState(true)
+    const loading= true
     const [paying, setPaying] = useState(false)
-    const [error, setError] = useState(false)
-    const [orders, setOrders] = useState([])
+    const error=false
+    const orders = []
     const [order, setOrder] = useState({})
     let CinetPay = window.CinetPay;
-    let addToast = t2.error
-    useEffect(function () {
-        CinetPay.setConfig({
-            apikey: '8936433616017f33cc7a2b9.78720038',
-            site_id: 302789,
-            notify_url: routes.notify_url_cinetpay
-            // notify_url: 'https://15ac0633fc2d.ngrok.io/api/order/transactions/ipn-update',
-            // notify_url: 'https://wendyfy-listener.novobyte.org/cinetpay-php-sdk-master/exemple/notify/index.php',
-            // return_url: "https://wendyfy-listener.novobyte.org/cinetpay-php-sdk-master/exemple/return/index.php",
-            // cancel:"http://wendyfy-listener.novobyte.org/cinetpay-php-sdk-master/exemple/cancel",
-        });
+    // let addToast = t2.error
+    // useEffect(function () {
+    //     CinetPay.setConfig({
+    //         apikey: '8936433616017f33cc7a2b9.78720038',
+    //         site_id: 302789,
+    //         notify_url: routes.notify_url_cinetpay
+    //         // notify_url: 'https://15ac0633fc2d.ngrok.io/api/order/transactions/ipn-update',
+    //         // notify_url: 'https://wendyfy-listener.novobyte.org/cinetpay-php-sdk-master/exemple/notify/index.php',
+    //         // return_url: "https://wendyfy-listener.novobyte.org/cinetpay-php-sdk-master/exemple/return/index.php",
+    //         // cancel:"http://wendyfy-listener.novobyte.org/cinetpay-php-sdk-master/exemple/cancel",
+    //     });
 
-        CinetPay.on('error', function (e) {
-            addToast(strings['subs_connection_error'] + ': ' + e.code + ',' + e.message)
-            setPaying(false)
-        });
-        CinetPay.on('paymentPending', function (e) {
+    //     CinetPay.on('error', function (e) {
+    //         addToast(strings['subs_connection_error'] + ': ' + e.code + ',' + e.message)
+    //         setPaying(false)
+    //     });
+    //     CinetPay.on('paymentPending', function (e) {
 
-        });
-        CinetPay.on('signatureCreated', function () {
-        })
-        CinetPay.on('paymentSuccessfull', function (paymentInfo) {
-            if (typeof paymentInfo.lastTime != 'undefined') {
-                // result_div.innerHTML = '';
-                if (paymentInfo.cpm_result == '00') {
-                    toast.success(strings['payment_completed'])
-                    setPaying(false)
-                    window.location.reload();
-                } else {
-                    addToast(strings['subs_connection_error'] + ': ' + paymentInfo.cpm_error_message)
-                    setPaying(false)
-                }
-            }
-        });
+    //     });
+    //     CinetPay.on('signatureCreated', function () {
+    //     })
+    //     CinetPay.on('paymentSuccessfull', function (paymentInfo) {
+    //         if (typeof paymentInfo.lastTime != 'undefined') {
+    //             // result_div.innerHTML = '';
+    //             if (paymentInfo.cpm_result === '00') {
+    //                 toast.success(strings['payment_completed'])
+    //                 setPaying(false)
+    //                 window.location.reload();
+    //             } else {
+    //                 addToast(strings['subs_connection_error'] + ': ' + paymentInfo.cpm_error_message)
+    //                 setPaying(false)
+    //             }
+    //         }
+    //     });
 
-        axios.get(`${routes.server}/order/user/${authentication.userid}`).then(result => {
-            setOrders(result.data)
-        }).catch(error => {
-            setError(true)
-        }).finally(e => {
-            setLoading(false)
-        })
-    }, [])
+        // axios.get(`${routes.server}/order/user/${authentication.userid}`).then(result => {
+    //         setOrders(result.data)
+    //     }).catch(error => {
+    //         setError(true)
+    //     }).finally(e => {
+    //         setLoading(false)
+    //     })
+    // }, [])
     return <Card className="single-my-account mb-20">
         <ToastContainer/>
         <Card.Header className="panel-heading">
@@ -296,6 +296,7 @@ const UserOrders = ({authentication, strings}) => {
                                                             <tr>
                                                                 <td rowSpan="5">
                                                                     <img
+                                                                    alt="Product "
                                                                         src={product.productRef.image[0]}
                                                                         height="150"/>
                                                                 </td>
@@ -366,10 +367,10 @@ const UserOrders = ({authentication, strings}) => {
 
 const UserTransactions = ({authentication, strings}) => {
     const [loading, setLoading] = useState(true)
-    const [paying, setPaying] = useState(false)
+    // const [paying, setPaying] = useState(false)
     const [error, setError] = useState(false)
     const [transactions, setTransactions] = useState([])
-    let addToast = t2.error
+    // let addToast = t2.error
     useEffect(function () {
         axios.get(`${routes.server}/order/transactions/${authentication.userid}`).then(result => {
             setTransactions(result.data)
@@ -378,7 +379,7 @@ const UserTransactions = ({authentication, strings}) => {
         }).finally(e => {
             setLoading(false)
         })
-    }, [])
+    })
     return <Card className="single-my-account mb-20">
         <ToastContainer/>
         <Card.Header className="panel-heading">
@@ -449,9 +450,9 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {};
-};
+// const mapDispatchToProps = dispatch => {
+//     return {};
+// };
 
 
 export default connect(mapStateToProps)(multilanguage(MyAccount));

@@ -5,7 +5,7 @@ import { useToasts } from "react-toast-notifications";
 import { getDiscountPrice } from "../../helpers/product";
 import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
-import {routes} from "../../config/routes"
+// import {routes} from "../../config/routes"
 const ProductGridSingle = ({
   product,
   currency,

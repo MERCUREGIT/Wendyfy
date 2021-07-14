@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { animateScroll } from "react-scroll";
 import FooterCopyright from "../../components/footer/FooterCopyright";
 import FooterNewsletter from "../../components/footer/FooterNewsletter";
@@ -51,7 +51,7 @@ const FooterOne = ({
         <div className="row">
           <div
             className={`${
-              sideMenu ? "col-xl-2 col-sm-4" : "col-lg-2 col-sm-4"
+              sideMenu ? "col-xl-4 col-sm-6" : "col-lg-4 col-sm-6"
             }`}
           >
             {/* footer copyright */}
@@ -130,7 +130,7 @@ const FooterOne = ({
           </div>*/}
           <div
             className={`${
-              sideMenu ? "col-xl-3 col-sm-4" : "col-lg-2 col-sm-6"
+              sideMenu ? "col-xl-4 col-sm-6" : "col-lg-4 col-sm-6"
             }`}
           >
             <div
@@ -187,7 +187,7 @@ const FooterOne = ({
           </div>
           <div
             className={`${
-              sideMenu ? "col-xl-3 col-sm-8" : "col-lg-4 col-sm-6"
+              sideMenu ? "col-xl-4 col-sm-6" : "col-lg-4 col-sm-6"
             }`}
           >
             {/* footer newsletter */}

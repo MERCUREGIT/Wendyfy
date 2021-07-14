@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux"; 
-import {routes} from '../../config/routes'
+// import {routes} from '../../config/routes'
 const HeroSliderOneSingle = ({ data, sliderClassName }) => {
   return (
     <div

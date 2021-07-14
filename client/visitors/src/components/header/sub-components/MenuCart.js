@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getDiscountPrice } from "../../../helpers/product";
-import {routes} from "../../../config/routes"
+// import {routes} from "../../../config/routes"
 import {multilanguage} from "redux-multilanguage";
 const MenuCart = ({ cartData, currency, deleteFromCart,strings }) => {
   let cartTotalPrice = 0;

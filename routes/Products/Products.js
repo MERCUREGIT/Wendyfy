@@ -11,7 +11,7 @@ const {isEmpty, multiImageUplaod, eCommerceUploadDir} = require('../../helpers/u
 const {verifyToken} = require('../../helpers/authentication');
 
 
-router.post('/', verifyToken, (req, res) => {
+router.post('/', (req, res) => {
 // console.log(req.files)
 
     /*let initVar = JSON.parse(req.body.variations);

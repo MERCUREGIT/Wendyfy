@@ -25,13 +25,13 @@ const ProductDescriptionInfo = ({
     strings
 }) => {
   const [selectedProductColor, setSelectedProductColor] = useState(
-    product.variation ? product.variation[0].color : ""
+    product.variation.length !==0 ? product.variation[0].color : ""
   );
   const [selectedProductSize, setSelectedProductSize] = useState(
-    product.variation ? product.variation[0].size[0].name : ""
+    product.variation.length !==0 ? product.variation[0].size[0].name : ""
   );
   const [productStock, setProductStock] = useState(
-    product.variation ? product.variation[0].size[0].stock : product.stock
+    product.variation.length !==0 ? product.variation[0].size[0].stock : product.stock
   );
   const [quantityCount, setQuantityCount] = useState(1);
 
@@ -272,21 +272,21 @@ const ProductDescriptionInfo = ({
       <div className="pro-details-social">
         <ul>
           <li>
-            <a href="//facebook.com">
+            <a href="https://www.facebook.com/wendybyfy">
               <i className="fa fa-facebook" />
             </a>
           </li>
-          <li>
+          {/* <li>
             <a href="//dribbble.com">
               <i className="fa fa-dribbble" />
             </a>
-          </li>
+          </li> */}
           <li>
-            <a href="//pinterest.com">
-              <i className="fa fa-pinterest-p" />
+            <a href="https://www.instagram.com/wendyfy_237/">
+              <i className="fa fa-instagram" />
             </a>
           </li>
-          <li>
+          {/* <li>
             <a href="//twitter.com">
               <i className="fa fa-twitter" />
             </a>
@@ -295,7 +295,7 @@ const ProductDescriptionInfo = ({
             <a href="//linkedin.com">
               <i className="fa fa-linkedin" />
             </a>
-          </li>
+          </li> */}
         </ul>
       </div>
     </div>

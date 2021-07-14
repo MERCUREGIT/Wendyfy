@@ -6,7 +6,7 @@ import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
 import { getDiscountPrice } from "../../helpers/product";
-import {routes} from "../../config/routes";
+// import {routes} from "../../config/routes";
 import {
   addToCart,
   decreaseQuantity,

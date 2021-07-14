@@ -9,7 +9,6 @@ import BlogPost from "../../wrappers/blog/BlogPost";
 import BlogCommentForm from './BlogComment'
 import { connect } from "react-redux";
 import uuid from "uuid/v4";
-import {Link} from "react-router-dom";
 import {multilanguage} from "redux-multilanguage";
 
 const BlogDetailsStandard = ({ allowComments,location, match, post, previous,next,strings}) => {

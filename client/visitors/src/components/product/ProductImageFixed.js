@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {routes} from "../../config/routes"
+// import {routes} from "../../config/routes"
 const ProductImageFixed = ({ product }) => {
   return (
     <div className="product-large-image-wrapper">

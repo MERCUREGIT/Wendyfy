@@ -82,7 +82,7 @@ export default {
       }
       let file = files[0];
       let context = this;
-      if (/\.(jpe?g|png|gif|webm|jfif)$/i.test(file.name)) {
+      if (/\.(jpg|jpe?g|png|gif|webm|jfif)$/i.test(file.name)) {
         this.progress=0;
         this.uploading=true;
         let reader = new FileReader();
@@ -102,7 +102,7 @@ export default {
           this.uploading=false;
         }).catch(e=>{
           this.uploading=false;
-          console.error(e)
+          console.error("uload error" , e)
           toast("Erreur de telechargement")
         });
       } else {

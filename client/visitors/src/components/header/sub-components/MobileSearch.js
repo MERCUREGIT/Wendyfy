@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { Link } from "react-router-dom";
 import {routes} from '../../../config/routes'
 import uuid from 'uuid/v4'
-import { multilanguage } from "redux-multilanguage";
+// import { multilanguage } from "redux-multilanguage";
 import { connect } from "react-redux";
 
 const MobileSearch = ({products}) => {

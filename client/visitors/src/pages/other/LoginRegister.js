@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useState} from "react";
 import MetaTags from "react-meta-tags";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {useToasts} from "react-toast-notifications";
 import {BreadcrumbsItem} from "react-breadcrumbs-dynamic";
 import Tab from "react-bootstrap/Tab";

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import uuid from "uuid/v4";
-import {routes} from "../../config/routes"
+// import {routes} from "../../config/routes"
 import {multilanguage} from "redux-multilanguage";
 const BlogSidebar = ({post,filterePost, searchElement,strings}) => {
 
@@ -136,7 +136,7 @@ const getAllTagsCount = (post)=>{
           {
               getAllTagsCount(post).map(element=>{
               return <li>
-                        <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
+                        <Link key={element.name + Math.random()} to={process.env.PUBLIC_URL + "/blog-standard"}>
                           {element.name}
                         </Link>
                       </li>
