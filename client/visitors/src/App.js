@@ -73,7 +73,7 @@ const App = (props) => {
     global.setModalContent=setModalContent;
     // props.dispatch(changeLanguage("fr"));
     // console.log("String list obtained",props)
-  });
+  },[props]);
   // useEffect(()=>{
   // })
   return (
@@ -94,6 +94,7 @@ const App = (props) => {
               <Modal
                   isOpen={modalContent}
                   // onAfterOpen={afterOpenModal}
+                  appElement={modalContent === {} ?  false : true}
                   onRequestClose={e => {
                     setModalContent(null)
                   }}

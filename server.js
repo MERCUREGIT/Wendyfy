@@ -36,17 +36,11 @@ app.use(bodyParser.json());
 app.use(methodOverride('_method'));
 app.use(cookieParser())
 
-// security
+require('./routes/routes')(app);
 
-// /**
-//  * @deprecated
-//  */
-
-// const multer  = require('multer')
-// const uploads = multer({ dest: 'uploads/' })
 app.use(helmet());
 app.use(upload());
-// method override
+
 
 app.post('/upload', function (req, res, next) {
   let sampleFile;
@@ -60,7 +54,6 @@ app.post('/upload', function (req, res, next) {
   let uploadTo='/uploads/' +(new Date().getTime())+'-'+ sampleFile.name
   uploadPath = __dirname +uploadTo ;
 
-  // Use the mv() method to place the file somewhere on your server
   sampleFile.mv(uploadPath, function(err) {
     if (err)
       return res.status(500).send(err);
@@ -70,50 +63,8 @@ app.post('/upload', function (req, res, next) {
 })
 app.use(morgan('combined', { stream: logger.stream.write }));
 
+app.use(express.static(path.resolve(__dirname, './client/visitors/build')));
 
-require('./routes/routes')(app);
-
-
-
-
-// Have Node serve the files for our built React app
-app.use(express.static(path.resolve(__dirname, './client/visitor/build')));
-// app.use(express.static(path.resolve(__dirname, './client/admin/build')));
-// app.use(express.static(path.resolve(__dirname, './client/admin/build')));
-
-
-// const fileUpload = require('express-fileupload');
-// default options
-// app.use(fileUpload());
-
-
-
-/*app.post('/upload', function(req, res) {
-  let sampleFile;
-  let uploadPath;
-
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
-
-  // sampleFile Input field
-  sampleFile = req.files.sampleFile;
-  uploadPath = __dirname + '/public/uploads/' + sampleFile.name;
-
-  // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv(uploadPath, function(err) {
-    if (err)
-      return res.status(500).send(err);
-
-    res.send(uploadPath);
-  });
-});*/
-
-// app.get("/admin",(req, res)=>{
-//     res.sendFile(path.resolve(__dirname, './client/admin/build', 'index.html'));
-// });
-
-// All other GET requests not handled before will return our React app
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/visitors/build', 'index.html'));
 });
