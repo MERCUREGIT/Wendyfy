@@ -25,13 +25,13 @@ const ProductDescriptionInfo = ({
     strings
 }) => {
   const [selectedProductColor, setSelectedProductColor] = useState(
-    product.variation.length !==0 ? product.variation[0].color : ""
+    product.variation && product.variation.length > 0 ? product.variation[0].color : ""
   );
   const [selectedProductSize, setSelectedProductSize] = useState(
-    product.variation.length !==0 ? product.variation[0].size[0].name : ""
+    product.variation && product.variation.length > 0 ? product.variation[0].size[0].name : ""
   );
   const [productStock, setProductStock] = useState(
-    product.variation.length !==0 ? product.variation[0].size[0].stock : product.stock
+    product.variation && product.variation.length > 0 ? product.variation[0].size[0].stock : product.stock
   );
   const [quantityCount, setQuantityCount] = useState(1);
 
@@ -70,7 +70,7 @@ const ProductDescriptionInfo = ({
         <p>{product.shortDescription}</p>
       </div>
 
-      {product.variation ? (
+      {product.variation && product.variation.length > 0 ? (
         <div className="pro-details-size-color">
           <div className="pro-details-color-wrap">
             <span>{strings['color']}</span>
@@ -104,7 +104,7 @@ const ProductDescriptionInfo = ({
           <div className="pro-details-size">
             <span>{strings['size']}</span>
             <div className="pro-details-size-content">
-              {product.variation &&
+              {product.variation && product.variation.length > 0  &&
                 product.variation.map(single => {
                   return single.color === selectedProductColor
                     ? single.size.map((singleSize, key) => {

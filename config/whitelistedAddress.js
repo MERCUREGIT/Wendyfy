@@ -1,4 +1,4 @@
-const whiteList =['http://localhost:8080','http://localhost:3000/','http://localhost:3000/login-register', 'http://localhost:5000/authentication/login/']
+const whiteList =['http://localhost:8080','http://localhost:3000/','http://localhost:3000/login-register', 'https://kellyfight.com','https://www.cinetpay.com']
 const corsOptions={
     origin: function(origin, callback) {
         if(whiteList.indexOf(origin) !== -1){

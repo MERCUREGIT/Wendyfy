@@ -71,11 +71,8 @@ const App = (props) => {
       })
     );
     global.setModalContent=setModalContent;
-    // props.dispatch(changeLanguage("fr"));
-    // console.log("String list obtained",props)
+    
   },[props]);
-  // useEffect(()=>{
-  // })
   return (
     <ToastProvider placement="bottom-left">
       <BreadcrumbsProvider>
@@ -92,9 +89,7 @@ const App = (props) => {
               }
             >
               <Modal
-                  isOpen={modalContent}
-                  // onAfterOpen={afterOpenModal}
-                  appElement={modalContent === {} ?  false : true}
+                  isOpen={modalContent !==null ? true : false}
                   onRequestClose={e => {
                     setModalContent(null)
                   }}
@@ -193,10 +188,6 @@ const App = (props) => {
                 />
 
                 {/* Blog pages */}
-                {/* <Route
-                  path={process.env.PUBLIC_URL + "/blog-standard"}
-                  component={BlogStandard}
-                /> */}
                 <Route
                     path={process.env.PUBLIC_URL + "/blog-standard"}
                     render={(routeProps) =>
@@ -215,7 +206,7 @@ const App = (props) => {
                 <Route
                   path={process.env.PUBLIC_URL + "/blog-details-standard/:id"}
                   render={(routeProps) =>
-                    {console.log(routeProps);
+                    {
                   return <BlogDetailsStandard {...routeProps} key={routeProps.match.params.id} />}
                 }/>
 

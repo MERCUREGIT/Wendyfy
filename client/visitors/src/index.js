@@ -12,11 +12,10 @@ import { fetchSlider } from "./redux/actions/sliderActions";
 import rootReducer from "./redux/reducers/rootReducer";
 import products from "./data/products.json";
 import App from "./App";
-import ErrorBoundary  from  './ErrorBoundary'
 import "./assets/scss/style.scss";
 import "./assets/css/style.css";
 import * as serviceWorker from "./serviceWorker";
-import logger from 'redux-logger';
+
 
 
 
@@ -25,7 +24,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 const store = createStore(
   rootReducer,
   load(),
-  composeWithDevTools(applyMiddleware(thunk,logger, save()))
+  composeWithDevTools(applyMiddleware(thunk, save()))
 );
 
 // fetch products from json file
@@ -35,9 +34,7 @@ store.dispatch(fetchSlider());
 
 ReactDOM.render(
   <Provider store={store}>
-    <ErrorBoundary>
       <App />
-    </ErrorBoundary>
   </Provider>,
   document.getElementById("root")
 );

@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const express = require('express');
 
@@ -63,10 +64,9 @@ app.post('/upload', function (req, res, next) {
 })
 app.use(morgan('combined', { stream: logger.stream.write }));
 
-app.use(express.static(path.resolve(__dirname, './client/visitors/build')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/visitors/build', 'index.html'));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client','visitors','build', 'index.html'));
 });
 
 

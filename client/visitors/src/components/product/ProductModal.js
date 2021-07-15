@@ -18,13 +18,13 @@ function ProductModal(props) {
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
   const [selectedProductColor, setSelectedProductColor] = useState(
-    product.variation.length !==0 ? product.variation[0].color : ""
+    product.variation && product.variation.length > 0 ? product.variation[0].color : ""
   );
   const [selectedProductSize, setSelectedProductSize] = useState(
-    product.variation.length !==0 ? product.variation[0].size[0].name : ""
+    product.variation && product.variation.length > 0 ? product.variation[0].size[0].name : ""
   );
   const [productStock, setProductStock] = useState(
-    product.variation.length !==0 ? product.variation[0].size[0].stock : product.stock
+    product.variation && product.variation.length > 0 ? product.variation[0].size[0].stock : product.stock
   );
   const [quantityCount, setQuantityCount] = useState(1);
 
@@ -168,7 +168,7 @@ function ProductModal(props) {
                   <p>{product.shortDescription}</p>
                 </div>
 
-                {product.variation ? (
+                {product.variation && product.variation.length > 0 ? (
                   <div className="pro-details-size-color">
                     <div className="pro-details-color-wrap">
                       <span>{strings['color']}</span>
@@ -177,8 +177,7 @@ function ProductModal(props) {
                           return (
                             <label
                               className={`pro-details-color-content--single ${single.color}`}
-                              key={key}
-                            >
+                              key={key} >
                               <input
                                 type="radio"
                                 value={single.color}

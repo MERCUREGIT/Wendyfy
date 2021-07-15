@@ -23,13 +23,13 @@ const ProductDescriptionInfoSlider = ({
   addToCompare
 }) => {
   const [selectedProductColor, setSelectedProductColor] = useState(
-    product.variation ? product.variation[0].color : ""
+    product.variation && product.variation.length > 0  ? product.variation[0].color : ""
   );
   const [selectedProductSize, setSelectedProductSize] = useState(
-    product.variation ? product.variation[0].size[0].name : ""
+    product.variation && product.variation.length > 0  ? product.variation[0].size[0].name : ""
   );
   const [productStock, setProductStock] = useState(
-    product.variation ? product.variation[0].size[0].stock : product.stock
+    product.variation && product.variation.length > 0  ? product.variation[0].size[0].stock : product.stock
   );
   const [quantityCount, setQuantityCount] = useState(1);
 
@@ -68,7 +68,7 @@ const ProductDescriptionInfoSlider = ({
         <p>{product.shortDescription}</p>
       </div>
 
-      {product.variation ? (
+      {product.variation && product.variation.length > 0 ? (
         <div className="pro-details-size-color justify-content-center">
           <div className="pro-details-color-wrap">
             <span>Color</span>
@@ -102,7 +102,7 @@ const ProductDescriptionInfoSlider = ({
           <div className="pro-details-size">
             <span>Size</span>
             <div className="pro-details-size-content">
-              {product.variation &&
+              {product.variation && product.variation.length > 0  &&
                 product.variation.map(single => {
                   return single.color === selectedProductColor
                     ? single.size.map((singleSize, key) => {
