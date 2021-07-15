@@ -24,9 +24,13 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 require("./config/database")(mongoose);
+
+
+app.use(morgan('combined', { stream: logger.stream.write }));
 app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, 'client', 'visitors', 'build')));
+
 app.use('/api/public/Ecommerce/products',express.static(path.join(__dirname, './public/Ecommerce/Products')));
 app.use('/api/public/Ecommerce/Slider',express.static(path.join(__dirname, './public/Ecommerce/Slider')));
 app.use('/api/public/Blog',express.static(path.join(__dirname, './public/Blog')));
@@ -62,11 +66,10 @@ app.post('/upload', function (req, res, next) {
     res.send("//"+req.headers.host+uploadTo);
   });
 })
-app.use(morgan('combined', { stream: logger.stream.write }));
 
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client','visitors','build', 'index.html'));
+   res.sendFile(path.join(__dirname, 'client','visitors','build', 'index.html'));
 });
 
 
