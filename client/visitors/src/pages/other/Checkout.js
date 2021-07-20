@@ -59,14 +59,7 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             currency: currency.currencySymbol,
             amount: cartTotalPrice.toFixed(2)
         };
-        let axiosConfig = {
-            headers: {
-                'Content-Type' : 'application/json',
-                "Access-Control-Allow-Origin": "*",
-          
-            }
-          };
-
+        let axiosConfig = { headers: { 'Content-Type' : 'application/json',"Access-Control-Allow-Origin": "*", }};
         axios.post(`${routes.server}/order/`, JSON.stringify(payload), axiosConfig).then(r => {
             setOrder(r.data)
             CinetPay.setSignatureData({
@@ -81,7 +74,6 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             CinetPay.getSignature();
         }).catch(e => {
             setIsLoading(false)
-            // deleteAllFromCart(false)
             addToast(strings['subs_connection_error'])
             history.push("/checkout")
         }).finally(e => {
@@ -89,21 +81,17 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
     }
 
     useEffect(() => {
-        // addToast("hhh")
         CinetPay.setConfig({
             apikey: '8936433616017f33cc7a2b9.78720038',
             site_id: 302789,
             notify_url: routes.notify_url_cinetpay,
-            // return_url:"http://wendyfy-listener.novobyte.org/cinetpay-php-sdk-master/exemple/return",
-            // cancel:"http://wendyfy-listener.novobyte.org/cinetpay-php-sdk-master/exemple/cancel",
+            return_url:"https/wendyfy.com/listener",
+            cancel:"https/wendyfy.com/listener",
         });
 
         CinetPay.on('error', function (e) {
             setIsLoading(false)
-            // deleteAllFromCart(false)
-            // history.push("/my-account")
             addToast(strings['subs_connection_error'] + "Errore code :"+ e.code +"Message :" + e.message )
-            // addToast(strings['subs_connection_error'] + e.code + ',' + e.message)
         });
         CinetPay.on('paymentPending', function (e) {
             
@@ -117,7 +105,6 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
         })
         CinetPay.on('paymentSuccessfull', function (paymentInfo) {
             if(typeof paymentInfo.lastTime != 'undefined'){
-                // result_div.innerHTML = '';
                 if(paymentInfo.cpm_result === '00'){
                     toast.success(strings['payment_completed'])
                     deleteAllFromCart(false)
@@ -129,9 +116,6 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                 }
             }
         });
-
-
-        //{"order":{"deliveryStatus":false,"date":"2021-06-20T12:46:59.490Z","_id":"60cf38e06fbd8c528492991f","products":[],"user":{"userRole":"normalUser","_id":"60b76328d6ee3a0774004316","username":"tkc","email":"tclarencek@gmail.com","telephone":"696076817","password":"$2b$10$S33ccOErFjhWHKFoPTofIe4skGO8e.TIEInCmaBIsp39tx/aUSn4u","__v":0,"role":"admin"},"paymentStatus":null,"isPayed":false,"__v":0}}
     })
 
     return (
