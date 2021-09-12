@@ -6,6 +6,7 @@
          style="height:100vh;width:100vw;z-index:9999;display:flex;align-items:center;justify-content:center;top:0;bottom:0;left:0;right:0;position:fixed;background-color: rgba(255,255,255,0.8)">
       <sui-loader active centered inline size="medium" content="chargement..."/>
     </div>
+
     <sweet-modal ref="modal1" blocking>
       <h3>Créer une nouvelle étiquette</h3>
       <label for="createTagName" class="form-label">Nom de l'étiquette</label>
@@ -59,7 +60,7 @@
       </div>
     </sweet-modal>
     <sweet-modal ref="modal4" blocking>
-      <h3>Créer une nouvelle coleur</h3>
+      <h3>Créer une nouvelle taille</h3>
       <label for="createCatName" class="form-label">Nom de la taille</label>
       <sui-input v-model="newSizeName" name="title" type="text" id="createSizeName" placeholder="Nom de la taille"
                  class="w-100"/>
@@ -82,7 +83,7 @@
             </sui-button>
             <sui-list divided relaxed style="height:150px;overflow-y: auto;overflow-x:hidden">
               <sui-list-item v-for="category in categories" :key="category.name">
-                <sui-list-icon name="times" size="large" vertical-align="middle"/>
+                <sui-list-icon  @click="()=> deleteProductAttributes('category', category)" style="cursor:pointer" name="times" size="large" vertical-align="middle"/>
                 <sui-list-content>
                   <a is="sui-list-header">{{ category.name }}</a>
                 </sui-list-content>
@@ -99,7 +100,7 @@
             </sui-button>
             <sui-list divided relaxed style="height:150px;overflow-y: auto;overflow-x:hidden">
               <sui-list-item v-for="tag in tags" :key="tag.name">
-                <sui-list-icon name="times" size="large" vertical-align="middle"/>
+                <sui-list-icon  @click="()=> deleteProductAttributes('tags', tag)" style="cursor:pointer"  name="times" size="large" vertical-align="middle"/>
                 <sui-list-content>
                   <a is="sui-list-header">{{ tag.name }}</a>
                 </sui-list-content>
@@ -116,7 +117,7 @@
             </sui-button>
             <sui-list divided relaxed style="height:150px;overflow-y: auto;overflow-x:hidden">
               <sui-list-item v-for="color in colors" :key="color.name">
-                <sui-list-icon name="times" size="large" vertical-align="middle"/>
+                <sui-list-icon @click="()=> deleteProductAttributes('colors', color)" style="cursor:pointer" name="times" size="large" vertical-align="middle"/>
                 <sui-list-content>
                   <a is="sui-list-header"><p
                       :style="`display:inline-block;height:15px;width:15px;background-color:${color.color};margin-right:10px;border:1px solid black;border-radius:50%`"/>
@@ -135,9 +136,9 @@
             </sui-button>
             <sui-list divided relaxed style="height:150px;overflow-y: auto;overflow-x:hidden">
               <sui-list-item v-for="size in sizes" :key="size.name">
-                <sui-list-icon name="times" size="large" vertical-align="middle"/>
+                <sui-list-icon @click="()=>deleteProductAttributes('size', size)" style="cursor: pointer" name="times" size="large" vertical-align="middle"/>
                 <sui-list-content>
-                  <a is="sui-list-header">{{ size.name }}</a>
+                  <a is="sui-list-header" style="cursor: default">{{ size.name }}</a>
                 </sui-list-content>
               </sui-list-item>
             </sui-list>
@@ -197,7 +198,7 @@
 
 
           <div class="form-check form-switch mt-3">
-            <input v-model="allowComments" name="allowComments" class="form-check-input" type="checkbox" value=""
+            <input v-model="allowComments" name="allowComments" class="form-check-input" type="checkbox" value="false"
                    id="flexCheckDefault">
             <label class="form-check-label mx-3" for="flexCheckDefault">
               Accepter les commentaires
@@ -289,7 +290,7 @@
                                  class="w-100"/>
                     </div>
                     <div class="col col-xs-1 col-sm-1 col-md-1">
-                      <i class="fa fa-trash float-end fa" style="cursor:pointer;margin-top: 50px"
+                      <i class="fa fa-trash float-end fa" style="cursor:pointer;margin-top: 50px;"
                          v-on:click="removeVariationSize(index,index2)"></i>
                     </div>
 
@@ -317,6 +318,13 @@
       <br/>
       <br/>
       <br/>
+           <div v-if="reqError!==''" class="alert alert-danger alert-dismissible fade show " role="alert">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                            {{reqError}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
       <sui-button content="Completer" color="black"
                   class="mt-3  mb-4 w-100" v-on:click="save" :loading="savingProduct"></sui-button>
     </main>
@@ -356,6 +364,7 @@ export default {
       newTagName: '',
       newSizeName: '',
       newColorName: '',
+      reqError:'',
       error: false,
       sku: "wendyfy" + Math.floor(Math.random() * 10000) + 1,
       name: "",
@@ -373,8 +382,8 @@ export default {
       selectedTags: [],
       choosen_categories: [],
       choosen_tag: '',
-      discount: '',
-      allowComments: "",
+      discount: 0,
+      allowComments: false,
       color: "#abcdef",
       variation_widgets: [{}],
       tinymceConfig: {
@@ -506,7 +515,7 @@ export default {
 
               }).catch((error) => {
                 Vue.$toast.open({message: 'Désolé, la demande n\'a pas abouti!', type: 'default'})
-                console.log(error);
+                this.reqError = error.response.data;
               }).finally(() => {
                 this.loadingData = false;
               })
@@ -536,6 +545,47 @@ export default {
 
   },
   methods: {
+    deleteProductAttributes(attribute, value){
+       switch (attribute) {
+         case "size":
+              axios.delete(`${config.server}/product-details/sizes/${value._id}`, {headers: {...config.headers}}).then(() => {
+                toast("supression de taille completee");
+                this.sizes = [...this.sizes.filter(size=>size._id !== value._id)];
+              }).catch(() => {
+                toast("Erreur de connexion")
+              });
+           break;
+         case "colors":
+              axios.delete(`${config.server}/product-details/colors/${value._id}`, {headers: {...config.headers}}).then(() => {
+                toast("supression de couleur completee");
+                this.colors = [...this.colors.filter(el=>el._id !== value._id)];
+              }).catch((err) => {
+                console.log(err)
+                toast("Erreur de connexion")
+              });
+           break;
+         case "category":
+              axios.delete(`${config.server}/product-details/category/${value._id}`, {headers: {...config.headers}}).then(() => {
+                toast("supression de taille completee");
+                this.categories = [...this.categories.filter(size=>size._id !== value._id)];
+              }).catch(() => {
+                toast("Erreur de connexion")
+              });
+           break;
+         case "tags":
+              axios.delete(`${config.server}/product-details/tags/${value._id}`, {headers: {...config.headers}}).then(() => {
+                toast("supression de taille completee");
+                this.categories = [...this.categories.filter(size=>size._id !== value._id)];
+              }).catch(() => {
+                toast("Erreur de connexion")
+              });
+           break;
+      
+         default:
+           toast("Erreur de supression")
+           break;
+       }
+    },
     onChangeVariationImage(index, link) {
       this.variations[index].image = link;
     },
@@ -616,7 +666,7 @@ export default {
         fullDescription,
         variations
       }
-      if (isEmpty({sku, name, image, price, discount, shortDescription, allowComments, fullDescription})) {
+      if (isEmpty({sku, name, image, price, discount, shortDescription, fullDescription})) {
         toast("Tous les champs sont obligatoires");
         return;
       }
@@ -641,9 +691,10 @@ export default {
         axios.put(`${config.server}/edit/${this.$route.params.id}`, data, {headers: {...config.headers}}).then(() => {
           toast("Creation completee")
           this.savingProduct = false;
-          this.$router.push("/admin/products")
+          this.$router.push("/products")
         }).catch((error) => {
           this.savingProduct = false;
+          this.reqError = error.response.data.err
           console.error(error)
           toast("Erreur de connexion")
         });
@@ -652,10 +703,11 @@ export default {
       axios.post(`${config.server}/`, data, {headers: {...config.headers}}).then(() => {
         toast("Creation completee")
         this.savingProduct = false;
-        this.$router.push("/admin/products")
+        this.$router.push("/products")
       }).catch((error) => {
         this.savingProduct = false;
-        console.error(error)
+        this.reqError = error.response.data.err
+        console.error(this.reqError)
         toast("Erreur de connexion")
       });
 
@@ -794,6 +846,7 @@ export default {
       this.variations.push({
         image: '',
         color: this.colors.length > 0 ? this.colors[0].name : '',
+        colorCode: this.colors.length > 0 ? this.colors[0].color : '',
         size: [{
           name: this.sizes.length > 0 ? this.sizes[0].name : '',
           stock: 1

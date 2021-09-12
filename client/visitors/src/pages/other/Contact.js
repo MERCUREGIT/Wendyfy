@@ -107,34 +107,15 @@ const Contact = ({ location,strings }) => {
                     <h3>{strings['contactSection']['follow_us']}</h3>
                     <ul>
                       <li>
-                        <a href="https://www.facebook.com/wendybyfy">
-                          <i className="fa fa-facebook" />
+                        <a target="_blank" href="https://www.facebook.com/wendybyfy" rel="noopener noreferrer">
+                          <i className="fa fa-facebook"  />
                         </a>
                       </li>
                       <li>
-                        <a href="https://www.instagram.com/wendyfy_237/">
+                        <a target="_blank" href="https://www.instagram.com/wendyfy_237/" rel="noopener noreferrer">
                           <i className="fa fa-instagram" />
                         </a>
                       </li>
-                  {/*   <li>
-                        <a href="//pinterest.com">
-                          <i className="fa fa-pinterest-p" />
-                        </a>
-                      </li> <li>
-                        <a href="//thumblr.com">
-                          <i className="fa fa-tumblr" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="//vimeo.com">
-                          <i className="fa fa-vimeo" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="//twitter.com">
-                          <i className="fa fa-twitter" />
-                        </a>
-                      </li>*/}
                     </ul>
                   </div>
                 </div>

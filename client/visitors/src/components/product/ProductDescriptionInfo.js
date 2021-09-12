@@ -71,17 +71,19 @@ const ProductDescriptionInfo = ({
       </div>
 
       {product.variation && product.variation.length > 0 ? (
-        <div className="pro-details-size-color">
+        <div  className="pro-details-size-color" >
           <div className="pro-details-color-wrap">
             <span>{strings['color']}</span>
             <div className="pro-details-color-content">
               {product.variation.map((single, key) => {
                 return (
                   <label
+                    style={{backgroundColor: single.colorCode || 'yellow'}}
                     className={`pro-details-color-content--single ${single.color}`}
                     key={key}
                   >
                     <input
+                      // style = {{border}}
                       type="radio"
                       value={single.color}
                       name="product-color"
@@ -103,17 +105,19 @@ const ProductDescriptionInfo = ({
           </div>
           <div className="pro-details-size">
             <span>{strings['size']}</span>
-            <div className="pro-details-size-content">
+            <div className="pro-details-size-content" >
               {product.variation && product.variation.length > 0  &&
                 product.variation.map(single => {
                   return single.color === selectedProductColor
                     ? single.size.map((singleSize, key) => {
                         return (
                           <label
+
                             className={`pro-details-size-content--single`}
                             key={key}
                           >
-                            <input
+                            <div style={{backgroundColor:single.color }}> <br></br> </div>
+                           <input
                               type="radio"
                               value={singleSize.name}
                               checked={

@@ -7,16 +7,15 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="formFile" class="form-label">Image de la bannière</label>
-                            <input ref="image" class="form-control" name="image" type="file" id="formFile">
+                            <input ref = 'image' v-on:change="handleFileUpload()" class="form-control" name="image" type="file" id="formFile">
                         </div>
                         <div class="mb-3">
                             <label for="title" class="form-label">Titre de la bannière</label>
-                            <input ref="title" type="text" name="title" class="form-control" id="title">
+                            <input v-model = "title" type="text" name="title" class="form-control" id="title">
                         </div>
                         <div class="mb-3">
                             <label for="text" class="form-label">Phrase descriptive</label>
-                            <input ref="subtitle" name="subtitle" type="text" class="form-control" id="button">
+                            <input v-model = "subtitle" name="subtitle" type="text" class="form-control" id="button">
                         </div>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
                         <button @click="submit()" type="submit" class="offset-sm-1 btn btn-primary">Enregistrer</button>
@@ -33,16 +32,22 @@
         name: "Add_slider",
         data(){
             return{
-                formData: new FormData()
+                title:'',
+                subtitle:'',
+                image :''
             }
         },
         methods:{
+             handleFileUpload(){
+                    this.image = this.$refs.image.files[0];
+                },
             submit(){
-                this.formData.append('image', this.$refs.image.files[0]);
-                this.formData.append('title', this.$refs.title.value);
-                this.formData.append('subtitle', this.$refs.subtitle.value);
+                let formData = new FormData();
+                formData.append('image', this.image);
+               formData.append('title',this.title);
+               formData.append('subtitle',this.subtitle);
 
-                axios.post(`${config.server}/slider`, this.formData, {headers: {...config.headers}}).then(()=>{
+                axios.post(`${config.server}/slider`, formData, {headers: {...config.headers}}).then(()=>{
                     this.$router.go();
                 }).catch((error)=>{
                     console.log(error);

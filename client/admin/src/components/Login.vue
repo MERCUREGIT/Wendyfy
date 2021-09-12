@@ -54,6 +54,7 @@
             return{
                 login : "",
                 password : "",
+                // isAdmin: false,
                 error: false,
                 button_text: "Envoyer",
                 spinner: false,
@@ -67,10 +68,30 @@
                 this.spinner = true;
                 this.error = false;
                 axios.post(`${config.server}/authentication/login`, {email : this.login, password : this.password}).then((res)=>{
-                    console.log("axios responce " + res)
                     document.cookie = res.data.accessToken;
-                    window.localStorage.setItem("token", res.data.accessToken)
-                    this.$router.push('/admin/products')
+                    if(res.data.userRole === "admin"){
+                         document.cookie += "accessToken="+res.data.accessToken;
+                        if (typeof window.localStorage !==  undefined) {
+                            window.localStorage.setItem("token", res.data.accessToken);
+                            window.localStorage.setItem("username", res.data.username);
+                            window.localStorage.setItem("isAdmin", true);
+                                setTimeout(()=>{
+                                alert('Please you need to log back again');
+                                axios.delete(`${config.server}/authentication/logout`).then(()=>{
+                                    this.$router.push("/");
+                                    window.localStorage.removeItem("isAdmin");
+                                    window.localStorage.removeItem("token");
+                                    window.localStorage.removeItem("username");
+                                }).catch(async ()=>{
+                                })
+                            },60*60*1000)
+                        }
+                        this.$router.push('/products')
+                    }
+                    else{
+                        this.$router.push('/404');
+                        window.localStorage.setItem("isAdmin", false)
+                    }
                 }).catch((error)=>{
                     console.log(error);
                     this.error = true;
@@ -79,6 +100,14 @@
                     e.target.disabled = false;
                 })
             },
+            logout(){
+            axios.delete(`${config.server}/authentication/logout`)
+            .then(()=>{
+                this.$router.push("/");
+                window.localStorage.removeItem("isAdmin");
+                document.cookie +="accessToken"+";max-age=0"; 
+            })
+        },
             check(){
                 if (document.querySelector('#flexCheckDefault').checked == true) {
                     document.querySelector('#password').setAttribute('type', 'text')
@@ -86,7 +115,12 @@
                     document.querySelector('#password').setAttribute('type', 'password')
                 }
             }
-        }
+        },
+        beforeMount(){
+           window.localStorage.removeItem("isAdmin");
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("username");
+        },
     }
 </script>
 

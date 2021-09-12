@@ -39,12 +39,14 @@ const ProductDescriptionTab = ({allowComments, strings, commentAction, spaceBott
   }
   
     useEffect(() => {
+      setName(authentication.username);
+      setEmail(authentication.email);
       if (isLoading) {
         simulateNetworkRequest().then(() => {
         setLoading(false);
       });
       }
-    }, [isLoading]);
+    }, [isLoading, authentication.username, authentication.email]);
   
 
   const submitReviewForm =()=>{
@@ -98,7 +100,7 @@ const ProductDescriptionTab = ({allowComments, strings, commentAction, spaceBott
                   </div>
                   <div className="col-lg-5">
                     <div className="ratting-form-wrapper pl-50">
-                      { authentication && !isRated ?  
+                      { authentication.login && !isRated ?  
                     <div className="row"> 
                         <div className ='col-md-6'>
                           <div className="star-box">
@@ -125,7 +127,7 @@ const ProductDescriptionTab = ({allowComments, strings, commentAction, spaceBott
                         </Button>
                       </div>
                     </div>
-                    : isRated ? <strong> {strings['thanks']} </strong> : <Link style={{padding:10, backgroundColor:'yellow'}}
+                    :  isRated? <strong> {strings['thanks']} </strong> : <Link style={{padding:10, backgroundColor:'yellow'}}
                             to={process.env.PUBLIC_URL + "/login-register"}>{strings['login_register_to_rate']}</Link>
                         }
                     
@@ -136,18 +138,18 @@ const ProductDescriptionTab = ({allowComments, strings, commentAction, spaceBott
                             e.preventDefault();
                             submitReviewForm();
                         }}>
-
+                           { authentication.login ?
                           <div className="row">
                             <div className="col-md-6">
                               <div className="rating-form-style mb-10">
-                                <input placeholder={strings['contactSection']['name_e']} type="text"
-                                onChange = {e=>setName(e.target.value)} />
+                                <input hidden placeholder={strings['contactSection']['name_e']} type="text"
+                                value = {authentication.username} />
                               </div>
                             </div>
                             <div className="col-md-6">
                               <div className="rating-form-style mb-10">
                                 <input placeholder={strings['contactSection']['email_e']} type="email"
-                                onChange = {e=>setEmail(e.target.value)}/>
+                                value = {authentication.username} hidden />
                               </div>
                             </div>
                             <div className="col-md-12">
@@ -161,7 +163,7 @@ const ProductDescriptionTab = ({allowComments, strings, commentAction, spaceBott
                                   {isReviewLoading?<p>{strings['loading']}...</p>:<input type="submit" defaultValue={strings['submit']}/>}
                               </div>
                             </div>
-                          </div>
+                          </div> : ""}
                         </form>
                       </div>
                     </div>
@@ -212,6 +214,7 @@ function ReviewItem({element}) {
 
 
 const mapStateToProps=(state, ownProps)=>{
+
 let product = state.productData.products.find(element=>{
   return element._id === ownProps.productId
 })
@@ -220,7 +223,7 @@ return {
         allowComments: product.allowComments,
         comments: product.comments,
         productRating: product.rating,
-        authentication: state.authentication.login
+        authentication: state.authentication
         }
 }
 

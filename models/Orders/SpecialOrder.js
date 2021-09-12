@@ -57,6 +57,10 @@ const SpecialOrder = new Schema({
         default: Date.now()
     },
     user: {
+        user:{
+            type:Schema.Types.ObjectId,
+            ref:'users'
+        },
         name:{
             type:String
         },

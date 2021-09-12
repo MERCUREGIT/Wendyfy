@@ -12,16 +12,16 @@ const RelatedProductSlider = ({ spaceBottomClass, category,strings }) => {
     grabCursor: true,
     breakpoints: {
       1024: {
-        slidesPerView: 4
+        slidesPerView: 6
       },
       768: {
-        slidesPerView: 3
+        slidesPerView: 5
       },
       640: {
-        slidesPerView: 2
+        slidesPerView: 3
       },
       320: {
-        slidesPerView: 1
+        slidesPerView: 3
       }
     }
   };
@@ -43,7 +43,7 @@ const RelatedProductSlider = ({ spaceBottomClass, category,strings }) => {
             <ProductGrid
               category={category}
               limit={6}
-              sliderClassName="swiper-slide"
+              sliderClassName="swiper-slide m-2"
             />
           </Swiper>
         </div>

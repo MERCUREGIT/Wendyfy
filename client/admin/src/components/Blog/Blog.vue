@@ -11,7 +11,7 @@
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Blog</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <router-link to="/admin/Blog/New" class="btn btn-sm btn-outline-primary">
+          <router-link to="/Blog/New" class="btn btn-sm btn-outline-primary">
             <i class="fas fa-plus"></i>
             Nouveau post
           </router-link>
@@ -31,7 +31,7 @@
               </a>
             </div>
             <div class="blog-info">
-              <h5><a href="#"  v-on:click="openBlog(blog._id)">{{ blog.title }}</a></h5>
+              <h5><a href="javascript:void(0)"  v-on:click="openBlog(blog._id)">{{ blog.title }}</a></h5>
               <p>{{ tr(blog.description, 123) }}</p>
               <div class="btn-bar d-flex justify-content-between align-items-center">
 
@@ -141,7 +141,7 @@ export default {
   },
   methods: {
    openBlog(id){
-     this.$router.push("/admin/Blog/Modification/"+id)
+     this.$router.push("/Blog/Modification/"+id)
    },
     getMonthStr(month) {
       return getMonth(month)

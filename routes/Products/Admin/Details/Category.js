@@ -45,7 +45,7 @@ router.put('/', (req, res)=>{
              .catch(err=>{res.status(403).send(false); });
 });
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     Category.remove({ _id: req.params.id }).then(category => {
         res.status(200).send(true);
     }).catch(err=>{res.status(403).send(false); });

@@ -4,12 +4,13 @@ require('dotenv').config();
 
 module.exports = {
 
-    userAuthenticated: function(req, res, next) {
-        if (req.isAuthenticated()) {
-            return next();
-        }
-        res.redirect('/')
-    },
+    // userAuthenticated: function(req, res, next) {
+    //     if (req.isAuthenticated()) {
+    //         return next();
+    //     }
+    //     res.redirect('/')
+    // },
+
     tokenGenerator: function (user,TOKEN_SECRET,duration){
         if(duration) return jwt.sign(user, TOKEN_SECRET,{expiresIn:`${duration}`});
         else return jwt.sign(user, TOKEN_SECRET)
@@ -31,7 +32,7 @@ module.exports = {
                     else
                     {
                         req.user = verification_obj.user;
-                        if( verification_obj.user.role ==="admin") {req.isAdmin= true;}
+                        if( verification_obj.user.userRole ==="admin") {req.isAdmin= true;}
                         next();
                     }
 
@@ -43,34 +44,22 @@ module.exports = {
             jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET,function (err, verification_obj)
             { if(err)
                 {
-                jwt.verify(refreshjwt, process.env.REFRESH_TOKEN_SECRET,(err, refreshTokenVerification)=>
-                    {
-                        if(err) {
-                            res.status(403).json({status:"Forbiden", success:false});
-                            res.redirect('/')
-                            res.end()
-                        }
-                        else
-                        {
-                            const token =  module.exports.tokenGenerator(refreshTokenVerification.user,process.env.ACCESS_TOKEN_SECRET,module.exports.maxAgeAccessToken)
-                            res.cookie("accessjwt", token);
-                            req.user = refreshTokenVerification.user;
-                            if(refreshTokenVerification.user.role ==="admin"){ req.isAdmin= true};
-                            next();
-                        }
-                    });
+                    console.log(err)
+                    res.status(403).json({status:"Forbiden", success:false});
+                     res.redirect('/');
+                    res.end();
                 }
              else
                 {
-                    if(user.role =="admin"){ req.isAdmin= true};
-                    req.user = user;
+                    req.user = verification_obj.user;
+                    if(verification_obj.user.userRole ==="admin"){ req.isAdmin= true};
                     next();
                 }
             });
         }
-
         return;
     },
+    
     logout:(req,res, next)=> {
         // check for  and clear cookie token
         const refreshjwt = req.cookies.refreshjwt;
@@ -100,8 +89,7 @@ module.exports = {
             next();
         }
     },
-     maxAgeAccessToken : 60*60*60,
-     maxAgeRefreshToken: 60*60*60
+     maxAgeAccessToken : 60*60,
 }
 
 

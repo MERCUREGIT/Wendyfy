@@ -6,7 +6,7 @@ const app = express();
 
 const morgan = require('morgan');
 const helmet = require('helmet');
-
+const cache = require('./helpers/routeCache');
 // file management
 const path = require('path');
 const upload = require('express-fileupload');
@@ -14,7 +14,6 @@ const logger = require('./config/winston');
 const corsOptions = require('./config/whitelistedAddress')
 
 // form http payload utilities
-const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
@@ -25,27 +24,35 @@ mongoose.Promise = global.Promise;
 
 require("./config/database")(mongoose);
 
-
+// app.use(cache(300))
 app.use(morgan('combined', { stream: logger.stream.write }));
-app.options('*', cors(corsOptions));
-app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'client', 'visitors', 'build')));
 
-app.use('/api/public/Ecommerce/products',express.static(path.join(__dirname, './public/Ecommerce/Products')));
-app.use('/api/public/Ecommerce/Slider',express.static(path.join(__dirname, './public/Ecommerce/Slider')));
-app.use('/api/public/Blog',express.static(path.join(__dirname, './public/Blog')));
+app.use('/api/public/Ecommerce/Slider',express.static('public/Ecommerce/Slider'));
+app.use('/api/public/Blog',express.static('public/Blog'));
+app.use('/api/uploads', express.static(__dirname + '/uploads')); //serve uploads statically
 app.use('/uploads', express.static(__dirname + '/uploads')); //serve uploads statically
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(cookieParser())
-
-require('./routes/routes')(app);
-
 app.use(helmet());
 app.use(upload());
 
+
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client','visitors','build', 'index.html'));
+});
+app.get('/admin', (req, res) => {
+  res.send('test working examples for admin route');
+});
+
+
+require('./routes/routes')(app);
 
 app.post('/upload', function (req, res, next) {
   let sampleFile;
@@ -68,10 +75,15 @@ app.post('/upload', function (req, res, next) {
 })
 
 
-app.get('/', (req, res) => {
-   res.sendFile(path.join(__dirname, 'client','visitors','build', 'index.html'));
-});
 
-
+app.use((error, req, res, next)=>{
+  res.status(error.status || 500);
+  console.log("From general error handler",error.message)
+  res.json({
+    error:{
+      message: error.message
+    }
+  })
+})
 
 module.exports = app;

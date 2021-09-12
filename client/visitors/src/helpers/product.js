@@ -7,15 +7,27 @@ export const getProducts = (products, category, type, limit) => {
     : products;
 
   if (type && type === "new") {
-    const newProducts = finalProducts.filter(single => single.new);
+    const newProducts = products.filter(single => {
+      var Difference_In_Time = new Date() - new Date(single.date).getTime();
+      console.log("time difference", Difference_In_Time)
+      if((Difference_In_Time / (1000 * 3600 * 24))<5) {
+        return true
+      }
+      return false
+    });
     return newProducts.slice(0, limit ? limit : newProducts.length);
   }
   if (type && type === "bestSeller") {
-    return finalProducts
+    return products
       .sort((a, b) => {
         return b.saleCount - a.saleCount;
       })
-      .slice(0, limit ? limit : finalProducts.length);
+      .slice(0, limit ? limit : products.length);
+  }
+  if (type && type === "topRated") {
+    const rateItems = [...products];
+    rateItems.sort((a,b)=> a.rating-b.rating);
+    return rateItems.slice(0, limit ? limit : products.length);
   }
   if (type && type === "saleItems") {
     const saleItems = finalProducts.filter(

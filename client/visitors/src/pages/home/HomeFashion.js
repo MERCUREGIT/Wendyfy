@@ -4,9 +4,10 @@ import LayoutOne from "../../layouts/LayoutOne";
 import HeroSliderOne from "../../wrappers/hero-slider/HeroSliderOne";
 import FeatureIcon from "../../wrappers/feature-icon/FeatureIcon";
 import TabProduct from "../../wrappers/product/TabProduct";
+import RecentBlogPostWrapper from "../../wrappers/blog/RecentBlogPostWrapper";
+// import TopRatedProductsWrapper from "../../wrappers/product/TopRatedProductsWrapper";
 
 const HomeFashion = () => {
-
 
   return (
     <Fragment>
@@ -19,15 +20,17 @@ const HomeFashion = () => {
       </MetaTags>
       <LayoutOne
         headerContainerClass="container-fluid"
-        headerPaddingClass="header-padding-1"
+        headerPaddingClass="header-padding-2"
         headerTop="visible"
       >
-     
+        
         <HeroSliderOne />
-
-        <FeatureIcon spaceTopClass="pt-100" spaceBottomClass="pb-60" />
-       
+        {/* display top rated products */}
+        {/* <TopRatedProductsWrapper spaceBottomClass="pb-60"/> */}
+        {/* add the categories for men and women */}
         <TabProduct spaceBottomClass="pb-60" category="fashion" />
+        <RecentBlogPostWrapper />
+        <FeatureIcon spaceTopClass="pt-100" spaceBottomClass="pb-60" />
       </LayoutOne>
     </Fragment>
   );

@@ -53,13 +53,13 @@
                     <input v-model="price" name="price" id="price" class="form-control r-0 light s-12 " type="number" required>
                   </div>
                   <div >
-                    <label for="price" class="col-form-label s-12"><i class="icon-money mr-2"></i>Pourcentage</label>
+                    <label for="price" class="col-form-label s-12"><i class="icon-money mr-2"></i>Pourcentage de réduction</label>
                     <input v-model="discount" name="discount" id="discount" class="form-control r-0 light s-12" min="0" max="100" type="number" required>
                   </div>
                   <hr>
                   <div class="col-12 checkbox-row">
                     <div class="form-check form-switch">
-                      <input v-model="allowComments" name="allowComments" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                      <input v-model="allowComments" name="allowComments" class="form-check-input" type="checkbox" id="flexCheckDefault">
                       <label class="form-check-label mx-3" for="flexCheckDefault">
                         Accepter les commentaires
                       </label>
@@ -165,8 +165,8 @@ export default {
       colors: [],
       choosen_categories: [],
       choosen_tag: '',
-      discount: '',
-      allowComments: "",
+      discount: 0,
+      allowComments: false,
       variation_widgets: [{}],
       image:"https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081"
 
@@ -219,7 +219,7 @@ export default {
       } else {
         let product_values = this.manageFormData();
         axios.post(`${config.server}/`, product_values, {headers: {...config.headers}, 'Content-Type': 'multipart/form-data'}).then(()=>{
-          this.$router.push('/admin/products');
+          this.$router.push('/products');
         }).catch((error)=>{
           console.log(error);
           this.error=true;

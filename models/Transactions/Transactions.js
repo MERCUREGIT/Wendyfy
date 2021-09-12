@@ -4,92 +4,41 @@ const axios = require('axios');
 const Schema = mongoose.Schema;
 
 const TransactionSchema = new Schema({
-    user: {
-       name: {
-           type:String,
-           required:[true, "Please provide buyers name"]
-       },
-       email: {
-        type:String,
-       },
-       country:{
-           type:String,
-           required:[true, "Please provide country"]
-       },
-       city:{
-           type:String,
-           required:[true,"Please provide your city"]
-        }
-
-    },
-    date: {
-        type: Date,
-        default: Date.now()
-    },
-    paymentDetails:{
-        paymentMethod:{
-            type:String,
-            default:'',
-            // required: true
-        },
-        amountPayedCFA:{
-            type: Number,
-            required: true
-        },
-
-        cardDetails:{
-           name: {
-            type:String,
-            default:""
-           },
-           number: {
-            type:Number,
-            default:0
-           },
-        },
-        mobileDetails:{
-            name: {
-                type:String,
-                default:""
+        user: {
+                type: Schema.Types.ObjectId,
+                ref: 'users',
             },
-            number: {
-                type:Number,
-                default:0
-            }
-        }
-        
-
-    },
-    
-});
-TransactionSchema.pre('save', async function(next){  
-
-    if(this.paymentDetails.mobileDetails.number){
-        await axios.post('https://api.monetbil.com/payment/v1/placePayment',{
-            service:"ol3Pd8C3TXibdcH602rdx6cAIlK8YFrz",
-            phonenumber:this.paymentDetails.mobileDetails.number,
-            amount: this.paymentDetails.amountPayedCFA,
-        },
-        {headers:{"Content-Type":"application/json"}})
-        .then(response=>console.log("service scucess",response))
-        .catch(err=> {throw  err});
+        orderInfo:{
+                type: Schema.Types.ObjectId,
+                ref: "Orders",
+                required: true
+            },
+        cpm_site_id: {type: String, default:""},
+        signature: {type: String, default:""},
+        cpm_amount:{type: String, default:""},
+        cpm_trans_id: {type: String, default:""},
+        cpm_custom: {type: String, default:""},
+        cpm_currency: {type: String, default:""},
+        cpm_payid: {type: String, default:""},
+        cpm_payment_date: {type: String, default:""},
+        cpm_payment_time: {type: String, default:""},
+        cpm_error_message: {type: String, default:""},
+        payment_method: {type: String, default:""},
+        cpm_phone_prefixe: {type: String, default:""},
+        cel_phone_num: {type: String, default:""},
+        cpm_ipn_ack: {type: String, default:""},
+        created_at: {type: String, default:""},
+        updated_at:{type: String, default:""},
+        cpm_result: {type: String, default:""},
+        cpm_trans_status: {type: String, default:""},
+        cpm_designation: {type: String, default:""},
+        buyer_name: {type: String, default:""},
+        cpm_trans_date: {type: String, default:""},
     }
-    if(this.paymentDetails.cardDetails.number){
-        // send a request here
-        await axios.post('https://api.monetbil.com/payment/v1/placePayment',{
-            service:"ol3Pd8C3TXibdcH602rdx6cAIlK8YFrz",
-            phonenumber:this.paymentDetails.mobileDetails.number,
-            amount: this.paymentDetails.amountPayedCFA,
-        },
-        {headers:{"Content-Type":"application/json"}})
-        .then(response=>console.log("service scucess",response))
-        .catch(err=> {throw  err});
-    }
+    );
 
-    next();
-});
 
 TransactionSchema.post('save', function(po){
-    console.log(po.paymentDetails.amountPayedCFA)
+    console.log(po.cpm_amount)
 })
 module.exports =   mongoose.model('ProductTransactions', TransactionSchema);

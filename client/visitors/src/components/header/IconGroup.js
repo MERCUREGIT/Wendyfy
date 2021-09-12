@@ -51,7 +51,7 @@ const IconGroup = ({
       className={`header-right-wrap ${iconWhiteClass ? iconWhiteClass : ""}`}
     >
        
-      {authentication.username !== "" && authentication.login? <div style={{textAlign:'center'}}> <h6 style={{fontWeight:"bold", marginTop:5, textAlign:'center'}}> {authentication.username.split(" ")[0]} </h6></div> : ""}
+      {authentication.username !== "" && authentication.login? <div style={{textAlign:'center'}}> <h6 style={{fontWeight:"bold", marginTop:5, textAlign:'center'}}> {authentication.username.split(" ")[0].substring(0,10)}..</h6></div> : ""}
       <div className="same-style account-setting d-none d-lg-block">
         <button title={strings["my_account"]}
           className="account-setting-active"

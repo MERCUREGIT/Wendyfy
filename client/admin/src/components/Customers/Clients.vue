@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     newMail(){
-      this.$router.push("/admin/Clients/mail");
+      this.$router.push("/Clients/mail");
     },
     submit() {
       let formdata = new FormData();

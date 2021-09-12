@@ -13,7 +13,7 @@ const FooterNewsletter = ({
 }) => {
   return (
     <div
-      className={`footer-widget ${spaceBottomClass ? spaceBottomClass : ""} ${
+      className={`footer-widget  ${spaceBottomClass ? spaceBottomClass : ""} ${
         sideMenu ? "ml-ntv5" : spaceLeftClass ? spaceLeftClass : ""
       } ${widgetColorClass ? widgetColorClass : ""}`}
     >
@@ -24,7 +24,7 @@ const FooterNewsletter = ({
         <p>{strings["subscribe_text"]}</p>
         {/* subscribe email */}
  
-        <SubscribeEmail mailchimpUrl="//devitems.us11.list-manage.com/subscribe/post?u=6bbb9b6f5827bd842d9640c82&amp;id=05d85f18ef" />
+        <SubscribeEmail mailchimpUrl="" />
       </div>
     </div>
   );

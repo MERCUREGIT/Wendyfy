@@ -2,38 +2,30 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux"; 
-// import {routes} from '../../config/routes'
-const HeroSliderOneSingle = ({ data, sliderClassName }) => {
+import {multilanguage} from "redux-multilanguage";
+
+const HeroSliderOneSingle = ({strings, data, sliderClassName }) => {
   return (
     <div
-     
-      className={`single-slider slider-height-1 bg-purple ${
+    style= {{backgroundImage:  "url(/api/"+data.image +")", backgroundSize: "cover"}}
+      className={`single-slider slider-height-2 bg-purple ${
         sliderClassName ? sliderClassName : ""
       }`}
     >
-      <div className="container">
-        <div className="row">
+      <div  className="container-fluid" style= {{backgroundColor: " rgba(0,0,0,0.5)", height:"100vh", width:"100vw"}}>
+        <div className="row justify-content-center " >
           <div  className="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-6">
-            <div  style ={{padding:"50px", marginBottom:"10px", marginLeft:"20px"}} className="slider-content slider-animated-1">
-              <h3 className="animated">{data.title}</h3>
-              <h1 className="animated">{data.subtitle}</h1>
-              <div className="slider-btn btn-hover">
+            <div   className="slider-content slider-animated-1">
+              <h1 className="animated text-center text-white">{data.title}</h1>
+              <h3 className="animated text-center text-white">{data.subtitle}</h3>
+              <div className="slider-btn text-center btn-hover">
                 <Link
-                  className="animated"
+                  className="animated text-white"
                   to={process.env.PUBLIC_URL + data.url}
                 >
-                  SHOP NOW
+                 { strings['SHOP_NOW'] }
                 </Link>
               </div>
-            </div>
-          </div>
-          <div className="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-6">
-            <div className="slider-single-img slider-animated-1">
-              <img
-                className="animated img-fluid"
-                src={ data.image}
-                alt=""
-              />
             </div>
           </div>
         </div>
@@ -53,4 +45,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(HeroSliderOneSingle);
+
+
+export default connect(mapStateToProps)(multilanguage(HeroSliderOneSingle));

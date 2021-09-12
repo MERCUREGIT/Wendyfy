@@ -15,7 +15,7 @@ export default{
         for (i = 0; i < data.length; i++) {
             arr2.push(data[i]);
             k++;
-            if (k == 2) {
+            if (k == 15) {
                 arr1.push(arr2);
                 arr2 = [];
                 k=0;

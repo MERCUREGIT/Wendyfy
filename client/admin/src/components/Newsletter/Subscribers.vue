@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     newMail(){
-      this.$router.push("/admin/newsletter/mail");
+      this.$router.push("/newsletter/mail");
     },
     submit() {
       let formdata = new FormData();

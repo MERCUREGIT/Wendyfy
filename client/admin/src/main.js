@@ -11,7 +11,10 @@ import SuiVue from 'semantic-ui-vue';
 import 'semantic-ui-css/semantic.min.css';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import { Plugin } from 'vue-fragment'
 
+
+Vue.use(Plugin);
 Vue.config.productionTip = false;
 Vue.use(VueCookies);
 Vue.use(VueRouter);
@@ -24,6 +27,23 @@ const router = new VueRouter({
   routes : Routes,
   mode : 'history'
 })
+
+router.beforeEach((to, from, next) => {
+  let ls = localStorage.getItem('isAdmin');
+  let token = localStorage.getItem('token');
+  if(from.path === '/' && to.path === "/"){
+    next();
+  }
+  else if(ls===true || typeof token === 'string'){
+     next();
+  }
+  else if(ls === null || ls === false || typeof token === 'string') {
+    if(to.path === '/404'){ next()}
+    else {
+      alert('Connecter vous au Compte administrateur.');
+      next('/'); }
+  }
+});
 
 new Vue({
   render: h => h(App),

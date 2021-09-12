@@ -33,14 +33,16 @@
             }
         },
         mounted(){
-            axios.get(`${config.server}/product-details/tags`, {headers: {...config.headers}}).then((res)=>{
-                res.data[0].name.forEach((tag)=>{
-                    this.tags.push(tag);
+            axios.get(`${config.server}/product-details/tags`, {headers: {...config.headers}})
+                .then((res)=>{
+                    res.data[0].name.forEach((tag)=>{
+                        this.tags.push(tag);
+                    });
+                    this.$emit('new-tags', this.tags);
+                })
+                .catch((error)=>{
+                    console.log(error);
                 });
-                this.$emit('new-tags', this.tags);
-            }).catch((error)=>{
-                console.log(error);
-            });
         },
         methods: {
             registerTags(){

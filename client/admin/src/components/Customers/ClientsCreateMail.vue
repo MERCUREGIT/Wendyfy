@@ -191,7 +191,7 @@ export default {
       axios.post(`${config.server}/emails/send`,{users:selectedUsers,subject,body},{headers: {...config.headers}}).then(()=>{
         context.submitting=false;
         Vue.$toast.open({message: 'Courrier envoyé avec succès!', type: 'success'})
-        context.$router.push('/admin/Clients')
+        context.$router.push('/Clients')
       }).catch(()=>{
         Vue.$toast.open({message: 'Erreur de connexion!', type: 'default'})
       }).finally(()=>{

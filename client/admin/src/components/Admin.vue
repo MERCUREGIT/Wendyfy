@@ -44,12 +44,12 @@
                                     Mesures
                                 </span>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <span class="nav-link" @click="component= 'Orders'">
                                     <span><i class="fas fa-file"></i></span>
                                     Commandes
                                 </span>
-                            </li>
+                            </li> -->
                             <li class="nav-item">
                                 <span class="nav-link" href="#" @click="component= 'Clients'">
                                     <span><i class="fas fa-users"></i></span>
@@ -66,6 +66,12 @@
                                 <span class="nav-link" href="" @click="component= 'Slider'">
                                     <span><i class="fas fa-pager"></i></span>
                                     Bannière
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link" href="" @click="component= 'UserPage'">
+                                    <span><i class="fas fa-pager"></i></span>
+                                    Utilisateur
                                 </span>
                             </li>
 
@@ -105,11 +111,12 @@
 import ProductsVue from './Products/Manager/Products';
 import BlogVue from './Blog/Blog.vue'
 import Bin from "./Navigation/Elements/Bin.vue"
-import OrdersVue from './Orders/Orders'
+// import OrdersVue from './Orders/Orders'
 import ClientsVue from './Customers/Clients'
 import Add_productVue from './Products/Manager/Add_product.vue';
 import SliderVue from './Slider/Slider.vue';
 import MeasuresVue from './Orders/Measures.vue';
+import UserPage  from './others/UserPage.vue';
 
 export default {
     name : 'Admin',
@@ -122,11 +129,12 @@ export default {
         'Products': ProductsVue,
         "AddProduct": Add_productVue,
         'Clients': ClientsVue,
-        'Orders': OrdersVue,
+        // 'Orders': OrdersVue,
         "Bin":  Bin,
         "Slider": SliderVue,
         'Blog' : BlogVue,
-        "Measures": MeasuresVue
+        "Measures v": MeasuresVue,
+        "UserPage":UserPage
     },
 
 }

@@ -2,11 +2,11 @@ let env = process.env.NODE_ENV || 'development';
 let server ="";
 
 if (env === 'development') {
-    server = "http://localhost:5000"
+    server = "http://localhost:5000/api"
 }
 else
 {
-    server= ""
+    server= "https://wendyfy.com/api"
  }
 
  export default {

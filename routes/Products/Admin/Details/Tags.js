@@ -45,7 +45,7 @@ router.put('/', (req, res)=>{
 /**
  * Decsription: API delete request for product Tags deletion
  */
-router.delete('/delete/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     Tags.remove({ _id: req.params.id }).then(Tags => {
         res.status(200).send(true);
     }).catch(err=>{res.status(403).send(false); });

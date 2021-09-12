@@ -9,6 +9,7 @@ import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Modal from 'react-modal';
 import 'react-toastify/dist/ReactToastify.css';
+
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
 
@@ -93,6 +94,7 @@ const App = (props) => {
                   onRequestClose={e => {
                     setModalContent(null)
                   }}
+                  ariaHideApp={false}
                   style={{
                     content: {
                       top: '50%',

@@ -6,8 +6,11 @@ import {routes} from '../../config/routes'
 import { multilanguage } from "redux-multilanguage";
 import PropTypes from "prop-types";
 import {Button} from "react-bootstrap";
+import {connect} from "react-redux";
 
 class  MeasurementForm  extends Component {
+ 
+
     state = {
         // isMeasure:false,
         name: "",
@@ -32,7 +35,13 @@ class  MeasurementForm  extends Component {
         pied: 0,
         longeurPantalonRobe: 0,
     }
-
+    componentDidMount(){
+      const  user= this.props.user;
+      this.setState((state)=> {
+        return {...state,name : user.username, user : user.userid, email : user.useremail}
+       });
+    }
+     
       handleInputChange = (e) => {
         const { name, value } = e.target;
         
@@ -225,7 +234,21 @@ MeasurementForm.propTypes = {
     strings: PropTypes.object
 };
 
+const mapStateToProps = state => {
+  return {
+      user: state.authentication,
+  };
+};
 
- export default multilanguage(MeasurementForm);
+// const mapDispatchToProps = dispatch => {
+//   return {
+//       deleteAllFromCart: addToast => {
+//           dispatch(deleteAllFromCart(addToast));
+//       }
+//   };
+// };
+
+
+export default connect(mapStateToProps)(multilanguage(MeasurementForm));
 
  

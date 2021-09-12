@@ -2,7 +2,9 @@ const express = require('express');
  const router = express.Router();
  const SpecialOrder = require('../../models/Orders/SpecialOrder');
  const axios = require('axios');
+ const User = require('../../models/Users/User');
  const { verifyToken } = require('../../helpers/authentication');
+ const Transaction = require('../../models/Transactions/Transactions');
 
 // ############################ SPECIAL ORDERS ########################################""
 
@@ -24,6 +26,25 @@ router.get('/',verifyToken, (req, res) => {
     {
         res.status(403).send('You are not authorized to acess this resource')
     }
+});
+
+router.get('/single/:user',verifyToken, (req, res) => {
+        SpecialOrder.find({"user.user":req.params.user})
+        .populate({
+            path: 'user',
+            populate:{
+                path:'user',
+                model: User}})
+        .populate({
+            path: 'paymentStatus',
+            model: Transaction})
+        .then(specialOrders => {    
+                    res.status(200).json(specialOrders);
+                }
+        ).catch(err=>{
+            console.log(err);
+            res.status(400).send("Can't get special orders")
+        });
 });
 
 
@@ -49,6 +70,7 @@ router.post('/', (req, res) => {
             longeurPantalon:req.body.longeurPantalonRobe
         }, 
         user :{
+            user: req.body.user || "60ef0636cda95ec7be91a035",
             name:req.body.name,
             country:req.body.country,
             city:req.body.city,

@@ -20,11 +20,15 @@ router.post('/', verifyToken, (req, res) => {
 
     if(req.isAdmin)
     {
-    const newSlider = new Slider({  title: req.body.title,subtitle: req.body.subtitle, image:multiImageUplaod(req.files.image, 'Ecommerce/Slider')});
+        let imageFile = req.files.image;
+        console.log(req.files)
+    const newSlider = new Slider({  title: req.body.title,subtitle: req.body.subtitle, image:multiImageUplaod(Array.isArray(imageFile) ? imageFile[0] : imageFile , 'Ecommerce/Slider')});
 
     newSlider.save()
         .then(savedPost => {res.status(200).json(savedPost);})
-        .catch(err=>{res.status(401).send(err)});
+        .catch(err=>{
+            console.log(err)
+            res.status(401).send(err)});
     }
     else
     {

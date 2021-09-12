@@ -16,6 +16,7 @@ const LanguageCurrencyChanger = ({
 
   const setCurrencyTrigger = e => {
     const currencyName = e.target.value;
+    console.log(currencyName)
     setCurrency(currencyName);
   };
 
@@ -67,7 +68,7 @@ const LanguageCurrencyChanger = ({
         </span>
         <div className="lang-car-dropdown">
           <ul>
-            <li>
+            {/* <li>
               <button value="USD" onClick={e => setCurrencyTrigger(e)}>
                 USD
               </button>
@@ -76,7 +77,7 @@ const LanguageCurrencyChanger = ({
               <button value="EUR" onClick={e => setCurrencyTrigger(e)}>
                 EUR
               </button>
-            </li>
+            </li> */}
             <li>
               <button value="FCFA" onClick={e => setCurrencyTrigger(e)}>
                 FCFA

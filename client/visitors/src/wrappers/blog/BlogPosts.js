@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 // import {routes} from "../../config/routes"
 import {multilanguage} from "redux-multilanguage/index";
 const BlogPosts = ({ post,strings }) => {
@@ -15,7 +16,7 @@ const BlogPosts = ({ post,strings }) => {
           <div className="blog-content-2">
             <div className="blog-meta-2">
               <ul>
-                <li>{post.date}</li>
+                <li>{ moment(post.date).format('MMMM d, YYYY') }</li>
                 <li>
                   <Link to={process.env.PUBLIC_URL + `/blog-details-standard/${post._id}`}>
                     {post.comments.length} <i className="fa fa-comments-o" />
@@ -42,17 +43,12 @@ const BlogPosts = ({ post,strings }) => {
                 <div className="share-social">
                   <ul>
                     <li>
-                      <a className="facebook" href="//facebook.com">
+                      <a className="facebook" href="https://www.facebook.com/wendybyfy">
                         <i className="fa fa-facebook" />
                       </a>
                     </li>
                     <li>
-                      <a className="twitter" href="//twitter.com">
-                        <i className="fa fa-twitter" />
-                      </a>
-                    </li>
-                    <li>
-                      <a className="instagram" href="//instagram.com">
+                      <a className="instagram" href="https://www.instagram.com/wendyfy_237/">
                         <i className="fa fa-instagram" />
                       </a>
                     </li>

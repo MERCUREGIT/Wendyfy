@@ -39,7 +39,7 @@ router.post('/', (req, res) => {
 /**
  * Decsription: API delete request for product category deletion
  */
-router.delete('/delete/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     Color.remove({ _id: req.params.id }).then(color => {
         res.status(200).send(true);
     }).catch(err=>{res.status(403).send(false); });

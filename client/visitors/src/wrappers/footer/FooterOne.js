@@ -48,7 +48,7 @@ const FooterOne = ({
       } ${spaceRightClass ? spaceRightClass : ""}`}
     >
       <div className={`${containerClass ? containerClass : "container"}`}>
-        <div className="row">
+        <div className="row justify-content-center">
           <div
             className={`${
               sideMenu ? "col-xl-4 col-sm-6" : "col-lg-4 col-sm-6"
@@ -187,7 +187,7 @@ const FooterOne = ({
           </div>
           <div
             className={`${
-              sideMenu ? "col-xl-4 col-sm-6" : "col-lg-4 col-sm-6"
+              sideMenu ? "col-xl-4 col-sm-6" : "col-lg-4 col-sm-6 col-12"
             }`}
           >
             {/* footer newsletter */}

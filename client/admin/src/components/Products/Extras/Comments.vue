@@ -27,7 +27,15 @@
 
 <script>
     export default {
-        props: ['isComment', 'comments']
+        props: ['isComment', 'comments','product_id'],
+        methods: {
+            changeVisibility(){
+
+            },
+            deleteProductComment(){
+                console.log(this.product_id)
+            }
+        }
     }
 </script>
 

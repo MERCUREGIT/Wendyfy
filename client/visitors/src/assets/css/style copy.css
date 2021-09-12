@@ -1,0 +1,11 @@
+/* img{
+    max-width: 100%;
+    max-height: 100%;
+} */
+
+.bg-purple{
+    background-color:#ffc80026;
+}
+.slider-single-img>img {
+    max-height: 100%;
+}

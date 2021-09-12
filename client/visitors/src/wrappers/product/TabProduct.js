@@ -31,29 +31,44 @@ const TabProduct = ({
                 <h4> {strings["available_stock"]}</h4>
               </Nav.Link>
             </Nav.Item>
-            {/* <Nav.Item>
+            <Nav.Item>
               <Nav.Link  eventKey="newArrival">
                 <h4> {strings["new_arrivals"]}</h4>
               </Nav.Link>
-            </Nav.Item> */}
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link  eventKey="bestSeller">
+                <h4> Best Seller</h4>
+              </Nav.Link>
+            </Nav.Item>
           </Nav>
           <Tab.Content>
             <Tab.Pane eventKey="newArrival">
-              <div className="row">
+              <div className="row justify-content-center">
                 <ProductGrid
                   category={category}
                   type="new"
-                  limit={8}
+                  limit={12}
                   spaceBottomClass="mb-25"
                 />
               </div>
             </Tab.Pane>
             <Tab.Pane eventKey="anyItems">
-              <div className="row">
+              <div className="row justify-content-center">
                 <ProductGrid
                   category={category}
                   type="anyItems"
-                  limit={8}
+                  limit={12}
+                  spaceBottomClass="mb-25"
+                />
+              </div>
+            </Tab.Pane>
+            <Tab.Pane eventKey="bestSeller">
+              <div className="row justify-content-center">
+                <ProductGrid
+                  category={category}
+                  type="bestSeller"
+                  limit={12}
                   spaceBottomClass="mb-25"
                 />
               </div>

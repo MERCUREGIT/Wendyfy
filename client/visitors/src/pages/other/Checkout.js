@@ -1,6 +1,6 @@
 import axios from "axios";
 import PropTypes from "prop-types";
-import React, {Fragment, useState, useEffect} from "react";
+import React, {Fragment, useState} from "react";
 import {Link,useHistory} from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import {connect} from "react-redux";
@@ -13,16 +13,15 @@ import {routes} from '../../config/routes'
 import {multilanguage} from "redux-multilanguage";
 import LoadingOverlay from 'react-loading-overlay';
 import {deleteAllFromCart} from "../../redux/actions/cartActions";
-// import {useToasts} from "react-toast-notifications";
 import { ToastContainer, toast } from 'react-toastify';
 const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCart}) => {
-    let addToast=toast.error
-    // const { addToast } = useToasts();
+    let addToast=toast.error;
     const {pathname} = location;
     let cartTotalPrice = 0;
     const history = useHistory();
     const [name, handleName] = useState(user.username !== "" ? user.username : "");
     const [country, handleCountry] = useState('');
+    const [tel, handleTel] = useState('');
     const [city, handleCity] = useState('');
     const paymentDetails = {};
     const [isLoading, setIsLoading] = useState(false);
@@ -30,20 +29,28 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
     const error = false;
     
     let CinetPay = window.CinetPay;
+    CinetPay.setConfig({
+        apikey: '8936433616017f33cc7a2b9.78720038',
+        site_id: 302789,
+        notify_url: routes.notify_url_cinetpay,
+        return_url:"http://localhost:5000/order/notify",
+        cancel:"https/wendyfy.com/listener",
+    });
 
     const handlePayment = async () => {
+
+       if( name !=="" && tel !=='' && country !== '' && city !=='' ){
         if (isLoading) {
             return;
         }
         if(order._id){
             CinetPay.setSignatureData({
-                amount: parseInt(document.getElementById('amount').value),
+                // amount: parseInt(document.getElementById('amount').value),
+                amount: 100,
                 trans_id: document.getElementById('trans_id').value,
                 currency: document.getElementById('currency').value,
                 designation: document.getElementById('designation').value,
                 custom: document.getElementById('cpm_custom').value,
-                // cel_phone_num: '696076817',
-                cpm_phone_prefixe:'237'
             });
             CinetPay.getSignature();
             return;
@@ -53,23 +60,25 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             name: name,
             country: country,
             city: city,
+            tel:tel,
             paymentDetails: paymentDetails,
             productOrders: cartItems,
             id: user.userid,
             currency: currency.currencySymbol,
-            amount: cartTotalPrice.toFixed(2)
+            // amount: cartTotalPrice.toFixed(2)
+            amount: 100
         };
-        let axiosConfig = { headers: { 'Content-Type' : 'application/json',"Access-Control-Allow-Origin": "*", }};
-        axios.post(`${routes.server}/order/`, JSON.stringify(payload), axiosConfig).then(r => {
+        axios.get(`${routes.server}/order/signature`)
+            .then(r => {
             setOrder(r.data)
+            payload.signature = r.data._id;
             CinetPay.setSignatureData({
-                amount: parseInt(document.getElementById('amount').value),
+                // amount: parseInt(document.getElementById('amount').value),
+                amount: 100,
                 trans_id: document.getElementById('trans_id').value,
                 currency: document.getElementById('currency').value,
                 designation: document.getElementById('designation').value,
                 custom: document.getElementById('cpm_custom').value,
-                // cel_phone_num: '697835780',
-                cpm_phone_prefixe:'237'
             });
             CinetPay.getSignature();
         }).catch(e => {
@@ -78,16 +87,31 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             history.push("/checkout")
         }).finally(e => {
         });
-    }
+        // payload.paymentDetails = 
+        // {cpm_site_id: "296911",
+        //         signature: "4dfbf5b8f40818abffe754b8a8aa04e4d29af25f",
+        //         cpm_amount: "11",
+        //         cpm_trans_date: "04092017140045",
+        //         cpm_trans_id: "50445985950",
+        //         cpm_custom: "08373459U",
+        //         cpm_currency: "XOF",
+        //         cpm_payid: "MP170904.1401.A91088",
+        //         cpm_payment_date: "2017-09-04",
+        //         cpm_payment_time: "14:01:35",
+        //         cpm_error_message: "SUCCES",
+        //         payment_method: "OM",
+        //         cpm_phone_prefixe: "225",
+        //         cel_phone_num: "79557788",
+        //         cpm_ipn_ack: "Y",
+        //         created_at: "2017-09-04 14:00:54",
+        //         updated_at: "2017-09-04 14:01:06",
+        //         cpm_result: "00",
+        //         cpm_trans_status: "ACCEPTED",
+        //         cpm_designation: "Test",
+        //         buyer_name: ""}
 
-    useEffect(() => {
-        CinetPay.setConfig({
-            apikey: '8936433616017f33cc7a2b9.78720038',
-            site_id: 302789,
-            notify_url: routes.notify_url_cinetpay,
-            return_url:"https/wendyfy.com/listener",
-            cancel:"https/wendyfy.com/listener",
-        });
+        
+        // axios.post(`${routes.server}/order/`, JSON.stringify(payload),  { headers: { 'Content-Type' : 'application/json',"Access-Control-Allow-Origin": "*", }})
 
         CinetPay.on('error', function (e) {
             setIsLoading(false)
@@ -95,18 +119,46 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
         });
         CinetPay.on('paymentPending', function (e) {
             
-            addToast(strings['subs_connection_error'] + 'code:' + e.code + 'Message::' + e.message )
             console.log("payment pending")
             
         });
         CinetPay.on('signatureCreated', function () {
           
-            console.log("payment pending")
+            console.log("signature created")
         })
         CinetPay.on('paymentSuccessfull', function (paymentInfo) {
-            if(typeof paymentInfo.lastTime != 'undefined'){
+
+            if(typeof paymentInfo.lastTime !== 'undefined'){
                 if(paymentInfo.cpm_result === '00'){
                     toast.success(strings['payment_completed'])
+                    console.log(paymentInfo)
+                    payload.paymentDetails = paymentInfo;
+                    /**
+                        buyer_name: ""
+                        cel_phone_num: "692519381"
+                        cpm_amount: "100"
+                        cpm_currency: "XAF"
+                        cpm_custom: ""
+                        cpm_designation: "payment_for_order - #612e7de7b2509f3150872d63"
+                        cpm_error_message: "SUCCES"
+                        cpm_ipn_ack: "N"
+                        cpm_payid: "MP210831.2009.B90332"
+                        cpm_payment_date: "2021-08-31"
+                        cpm_payment_time: "19:09:17"
+                        cpm_phone_prefixe: "237"
+                        cpm_result: "00"
+                        cpm_site_id: "302789"
+                        cpm_trans_date: "31082021190719"
+                        cpm_trans_id: "612e7de7b2509f3150872d63"
+                        cpm_trans_status: "ACCEPTED"
+                        created_at: "2021-08-31 19:09:17"
+                        lastTime: "ok"
+                        payment_method: "OMCM"
+                        signature: "a1b3be0a6aa051d50d939e294efde5af21a8dbcf1548452aff4717b3f2f0415810909"
+                        updated_at: "2021-08-31 19:09:18"
+
+                     */
+                    axios.post(`${routes.server}/order/`, JSON.stringify(payload),  { headers: { 'Content-Type' : 'application/json',"Access-Control-Allow-Origin": "*", }})
                     deleteAllFromCart(false)
                     history.push("/my-account")
                 }else{
@@ -115,8 +167,15 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                     addToast(strings['subs_connection_error'] + paymentInfo.cpm_error_message)
                 }
             }
-        });
-    })
+            });
+       }
+       else{
+           alert('P<rovide all user information please')
+           return;
+       }
+
+       
+    }
 
     return (
         <Fragment>
@@ -150,13 +209,19 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                                                            onChange={e => handleName(e.target.value)}/>
                                                 </div>
                                             </div>
+                                            <div className="col-lg-12 col-md-12">
+                                                <div className="billing-info mb-20">
+                                                    <label>{strings['user_tel']}</label>
+                                                    <input type="number" value={tel}
+                                                           onChange={e => handleTel(e.target.value)}/>
+                                                </div>
+                                            </div>
                                             <div className="col-lg-12">
                                                 <div className="billing-select mb-20">
                                                     <label>{strings['country']}</label>
                                                     <select onChange={e => handleCountry(e.target.value)} name="pays">
                                                         <option>{strings['choose_a_country']}</option>
-                                                        {Countries.map(country => <option key={country.country}
-                                                                                          value={country.country}>{country.country}</option>)}
+                                                        {Countries.map(country => <option key={country.country} value={country.country}>{country.country}</option>)}
                                                     </select>
                                                 </div>
                                             </div>
@@ -167,12 +232,6 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                                                            value={city}/>
                                                 </div>
                                             </div>
-                                            {/*    <div className="col-lg-12">
-                        <div className="billing-info">
-                          <label>{strings['payment_methods']}</label>
-                        </div>
-                        <PaymentMode strings={strings} handlePaymentDetails={handlePaymentDetails} paymentDetails={paymentDetails} />
-                      </div>*/}
                                         </div>
 
                                     </div>
@@ -281,14 +340,13 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             {/*<form>*/}
             {order._id && <div id="info_paiement">
                 <input type="hidden" id="amount" value={cartTotalPrice.toFixed(2)}/>
-
                 <input type="hidden" id="currency" value="XAF"/>
 
                 <input type="hidden" id="trans_id" value={order._id}/>
 
                 <input type="hidden" id="cpm_custom" value=""/>
 
-                <input type="hidden" id="designation" value={strings['payment_for_order'] + " - #" + order._id}/>
+                <input type="hidden" id="designation" value={'payment_for_order - #' + order._id}/>
             </div>}
             {/*</form>*/}
 

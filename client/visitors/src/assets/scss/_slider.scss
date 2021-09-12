@@ -47,25 +47,36 @@
   display: flex;
   align-items: flex-end;
   .slider-content {
-    padding: 183px 0 0;
+    position: absolute;
+      padding: 0;
+      margin: 0;
+      top: 20%;
+      left: 40vw;
+      right: auto;
+
+    // margin: 60% 0 0 20%;
     @media #{$xl-layout} {
-      padding: 80px 0 0;
+      // padding: 0% 0 0 0%;
+      
     }
     @media #{$lg-layout} {
-      padding: 45px 0 0;
+      // padding: 0;
+      // margin-top: auto;
+      // margin-bottom: auto;
     }
     @media #{$md-layout} {
-      padding: 0 0 0;
+      // margin-top: auto;
+      // margin-bottom: auto;
     }
     @media #{$xs-layout} {
-      padding: 0 0 40px;
-
-      text-align: center;
+      // padding: 0 0 40px;
+      // margin-top: 300px !important;
+      // margin-bottom: auto !important;
+      // text-align: center;
     }
     @media #{$sm-layout} {
-      padding: 0 0 0;
-
-      text-align: left;
+      // margin-top: 300px !important;
+      // margin-bottom: auto !important;
     }
     h3 {
       font-size: 24px;
@@ -77,7 +88,7 @@
       font-size: 72px;
       line-height: 97px;
 
-      margin: 6px 0 37px;
+      // margin: 6px 0 37px;
 
       color: #010101;
       @media #{$lg-layout} {
@@ -88,18 +99,18 @@
         font-size: 40px;
         line-height: 52px;
 
-        margin: 6px 0 20px;
+        // margin: 6px 0 20px;
       }
       @media #{$xs-layout} {
         font-size: 33px;
         line-height: 48px;
 
-        margin: 6px 0 20px;
+        // margin: 6px 0 20px;
       }
       @media #{$sm-layout} {
         font-size: 30px;
 
-        margin: 6px 0 10px;
+        // margin: 6px 0 10px;
       }
     }
     .slider-btn {
@@ -142,6 +153,7 @@
     }
   }
   .slider-single-img {
+    max-height: 100vh;
     margin: 0 -80px 0 -80px;
     @media #{$xl-layout} {
       margin: 0 0 0 0;
@@ -165,8 +177,8 @@
   -webkit-animation-duration: 1.3s;
           animation-duration: 1.3s;
 
-  -webkit-animation-fill-mode: both;
-          animation-fill-mode: both;
+  -webkit-animation-fill-mode: backwards;
+          animation-fill-mode: backwards;
 }
 
 .swiper-slide-active {
@@ -754,18 +766,19 @@
 /* home 3 */
 
 .slider-height-2 {
-  height: 800px;
+  min-height: 300px;
+  max-height: 300px;
   @media #{$xl-layout} {
-    height: 570px;
+    height: 270px;
   }
   @media #{$lg-layout} {
-    height: 500px;
+    height: 200px;
   }
   @media #{$md-layout} {
-    height: 500px;
+    height: 200px;
   }
   @media #{$xs-layout} {
-    height: 400px;
+    height: 200px;
   }
   &.slider-content-center {
     display: flex;

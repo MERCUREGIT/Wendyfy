@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { routes } from "../../config/routes";
-import data from '../../data/blog-featured/blop-post.json'
 
 export const POST_BLOG_COMMENT = "POST_BLOG_COMMENT";
 export const FETCH_BLOG_POST = "FETCH_BLOG_POST";
@@ -41,7 +40,7 @@ export const fetchBlogPost = ( ) => {
                 console.log(err)
                return dispatch({
                     type: FETCH_BLOG_POST,
-                    payload: [ ...data ]
+                    payload: [ ]
                 })
             })
      ;

@@ -5,63 +5,69 @@
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/products">
+                                <router-link class="nav-link" to="/products">
                                     <span><i class="fas fa-shopping-cart"></i></span>
                                     Produits
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link active-class="active" class="nav-link" to="/admin/products/new">
+                                <router-link active-class="active" class="nav-link" to="/products/new">
                                     <span><i class="fas fa-plus"></i></span>
                                     Nouveau produit
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/Measures">
+                                <router-link class="nav-link" to="/Measures">
                                     <span><i class="fas fa-pencil-ruler"></i></span>
                                     Mesures
                                 </router-link>
                             </li>
-                            <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/Orders">
+                            <!-- <li class="nav-item">
+                                <router-link class="nav-link" to="/Orders">
                                     <span><i class="fas fa-file"></i></span>
                                     Commandes
                                 </router-link>
-                            </li>
+                            </li> -->
                             <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/Clients">
+                                <router-link class="nav-link" to="/Clients">
                                     <span><i class="fas fa-users"></i></span>
                                     Clients
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/Blog">
+                                <router-link class="nav-link" to="/Blog">
                                 <span><i class="fas fa-th-large"></i></span>
                                     Blog
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/newsletter">
+                                <router-link class="nav-link" to="/newsletter">
                                     <span><i class="fas fa-pager"></i></span>
                                     Newsletter
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/contact">
+                                <router-link class="nav-link" to="/contact">
                                     <span><i class="fas fa-user-circle"></i></span>
                                     Contact
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/Slider">
+                                <router-link class="nav-link" to="/Slider">
                                     <span><i class="fas fa-pager"></i></span>
                                     Bannière
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link" to="/admin/transactions">
-                                    <span><i class="fas fa-money"></i></span>
-                                    Transactions
+                                <router-link class="nav-link" to="/transactions">
+                                    <span><i class="fas fa-file"></i></span>
+                                    Transactions / commandes
+                                </router-link>
+                            </li>
+                            <li class="nav-item">
+                                <router-link class="nav-link" to="/user-page">
+                                    <span><i class="fas fa-user"></i></span>
+                                    Utilisateur
                                 </router-link>
                             </li>
                             <li class="nav-item">
@@ -118,6 +124,7 @@
             this.logoutText = "Deconnexion en cour...";
             Axios.delete(`${config.server}/authentication/logout`).then(()=>{
                 this.$router.push("/");
+                window.localStorage.removeItem("isAdmin");
             }).catch(async ()=>{
                 this.logoutText = "Echec fatal...";
                await setTimeout(()=>{

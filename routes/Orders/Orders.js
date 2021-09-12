@@ -3,6 +3,7 @@ const router = express.Router();
 const Products = require('../../models/Products/Product');
 const Order = require('../../models/Orders/Orders');
 const User = require('../../models/Users/User');
+
 const ProductTransactionsNew = require('../../models/Transactions/Transactions.new');
 const Transaction = require('../../models/Transactions/Transactions');
 const {sendEmail} = require('../../helpers/mail-sender');
@@ -10,18 +11,25 @@ const axios = require('axios');
 const {verifyToken} = require('../../helpers/authentication');
 
 
+router.get('/signature', (req, res)=>{
+    const mongoose = require('mongoose');
+    let signatureID = new mongoose.Types.ObjectId();
+    res.status(200).json({_id:signatureID, status: "success"})
+})
+
+router.post('/notify', async (req, res) => {
+   console.log(req.body);
+});
+
 router.post('/', async (req, res) => {
     let orderList = req.body.productOrders;
-    let user="60ef0636cda95ec7be91a035"
-    if(req.body.id){
-        let user = await User.findById(req.body.id)
-    }
-    let mainOrder = {
-        products: [], paymentStatus: null, isPayed: false, deliveryStatus: false, currency: req.body.currency,
-        country: req.body.country, name: req.body.name, city: req.body.city,amount:req.body.amount
-    };
-    let order = new Order(mainOrder);
-    order = await order.save();
+    let paymentInfo = {...req.body.paymentDetails};
+
+    if(req.body.id){ paymentInfo.user = req.body.id;}
+    else{paymentInfo.user = '60ef0636cda95ec7be91a035';}
+
+    let mainOrder = {_id:req.body.signature, products: [], paymentStatus: null, deliveryStatus: false,country: req.body.country, name: req.body.name, city: req.body.city };
+
     let totalAmount = 0;
     for (let i = 0; i < orderList.length; i++) {
         let element = orderList[i];
@@ -55,16 +63,22 @@ router.post('/', async (req, res) => {
                 sizeName: product.variation[variationIndex].size[productSizeVariation].name || "",
                 unitPrice: (product.price - product.salePrice),
                 totalPrice }})
-        product.orderHistory ? product.orderHistory.push(order._id) : product.orderHistory = [order._id];
+        // product.orderHistory ? product.orderHistory.push(order._id) : product.orderHistory = [order._id];
+        product.saleCount += validQuantity;
         await product.save()
     }
-    order.products = mainOrder.products;
-    order = await order.save();
-    mainOrder._id = order._id;
-    sendEmail('Nouvelle commande', JSON.stringify({...order}).toString(),'ngumbukafon@gmail.com')
-    res.status(200).send(mainOrder)
-});
+    let order = await new Order({...mainOrder}).save();
+    let newTransaction = new Transaction({orderInfo:order ,...paymentInfo}).save().then(data=>{
+        order.paymentStatus = data;
+        order.save()
+        // sendEmail('Nouvelle commande', JSON.stringify({...order}).toString(),'ngumbukafon@gmail.com')
+        res.status(200).send(mainOrder)
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json(err)
+    });
 
+});
 
 router.get('/single/:prouct_id', (req, res) => {
     let productId = req.params.product_id;
@@ -79,7 +93,6 @@ router.get('/single/:prouct_id', (req, res) => {
         res.status(400).send("Order history not available")
     });
 });
-
 
 router.get('/:status', (req, res) => {
 
@@ -122,6 +135,8 @@ router.patch('/:product_id', verifyToken, (req, res) => {
     }
 });
 
+
+
 // toggle delivery status
 router.get('/user/:user_id', async (req, res) => {
     let orders = await Order.find({user: req.params.user_id}).populate({
@@ -140,29 +155,72 @@ router.get('/user/:user_id', async (req, res) => {
     res.status(200).send(orders)
 });
 
-// user transactions
+
+
+
+// // user transactions
+// router.get('/transactions/:user_id', async (req, res) => {
+//     /*let orders = await Order.find({user: req.params.user_id});
+//     let orderIds = [];
+//     orders.forEach(order=>{
+//         orderIds.push(order._id);
+//     })*/
+//     let transactions = await ProductTransactionsNew.find({user: "req.params.user_id"}).populate("order").populate('paymentStatus').populate('user')
+//     /*orders = JSON.parse(JSON.stringify(orders));
+//     for (let i=0;i<orders.length;i++){
+//         let order = orders[i];
+//        for(let j=0;j<)
+//         order.
+//         orders.splice(i,1,order)
+//     }*/
+//     res.status(200).send(transactions)
+// });
+
+
 router.get('/transactions/:user_id', async (req, res) => {
-    /*let orders = await Order.find({user: req.params.user_id});
-    let orderIds = [];
-    orders.forEach(order=>{
-        orderIds.push(order._id);
-    })*/
-    let transactions = await ProductTransactionsNew.find({user: req.params.user_id}).populate("order").populate('paymentStatus').populate('user')
-    /*orders = JSON.parse(JSON.stringify(orders));
-    for (let i=0;i<orders.length;i++){
-        let order = orders[i];
-       for(let j=0;j<)
-        order.
-        orders.splice(i,1,order)
-    }*/
+    let transactions = await Transaction.find({user: req.params.user_id}).populate({
+        path: 'orderInfo',
+        model: Order,
+        populate: {
+            path: 'products',
+            populate:{
+                path:'productRef',
+                model: Products
+            }
+        }
+    });
     res.status(200).send(transactions)
 });
 
 
+
+
+
+
 // all transactions admin
-router.get('/transactions/information/admin', async (req, res) => {
-    let transactions =await ProductTransactionsNew.find({}).populate('order').populate('user')
+router.get('/transactions/information/admin',verifyToken, async (req, res) => {
+    let transactions =await Transaction.find({})
+        .populate({
+            path: 'orderInfo',
+            model: Order,
+            populate: {
+                path: 'products',
+                populate:{
+                    path:'productRef',
+                    model: Products
+                }}})
+        .populate('user')
     res.status(200).send(transactions)
+});
+
+router.patch('/delivery-status/:order_id',verifyToken, async (req, res) => {
+   Order.findOne({_id:req.params.order_id})
+    .then(order=>{
+        order.deliveryStatus = !order.deliveryStatus;
+        order.save()
+        .then(doc=>res.status(200).send(order))})
+    .catch(err=>res.status(500).send(err))
+
 });
 
 
@@ -186,10 +244,15 @@ router.post('/transactions/cptx/:user_id/:order_id', verifyToken, async (req, re
     res.status(200).send(transaction)
 });
 
+
+
+
+
 // ipn update
 router.post('/transactions/ipn-update', verifyToken, async (req, res) => {
     console.log(req.body);
 });
+
 
 
 // create negative transaction

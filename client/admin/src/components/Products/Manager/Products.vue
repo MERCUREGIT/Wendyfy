@@ -16,7 +16,14 @@
                         <div v-else class="table-responsive">
                             <div class="container">
                                 <div class="row">
-                                    <div class="col-sm-6"><h2>Liste des produits</h2></div>
+                                    <div class="col-sm-6"><h2>Liste des produits</h2>
+                                    
+                                    <h1>
+                                        <span class="badge bg-danger rounded-pill top-pills">Produits : {{products.length}} </span>
+                                        <span class="badge bg-warning top-pills rounded-pill">Produits vendus: {{countProductsSold(products)}} </span>
+                                    
+                                    </h1>
+                                    </div>
                                     <div class="col-sm-6"><input @keyup="search()" name="search" class="form-control" type="search" id="search" placeholder="Tapez votre recherche ici..."></div>
                                 </div>
                             </div>
@@ -30,35 +37,50 @@
                                         </div>
                                     </th> -->
                                     <th>NOM</th>
+                                    <th>Evaluation</th>
+                                    <th>Qté disponible</th>
+                                    <th>Qté Vendus</th>
+                                    <th>-- %</th>
+                                    <th>P.U</th>
                                     <th>CATEGORIE</th>
-                                    <th>EVALUATION</th>
-                                    <th>POURCENTAGE</th>
-                                    <th>PRIX UNITAIRE</th>
-                                    <th>ETIQUETTE</th>
+                                    <th>Etiquette</th>
                                     <th>IMAGE</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-bind:key="product.id" v-for="(product) in products">
+                                <tr :class="[countProduct(product) > 3? '':'alert alert-danger ' ] " v-bind:key="product._id" v-for="(product) in products">
                                     <td>{{product.name}}</td>
-                                    <td>
+                                    <td>{{product.rating}}</td>
+                                    <td>{{countProduct(product)}}</td>
+                                    <td>{{product.saleCount}}</td>
+                                    <td>{{product.discount}}</td>
+                                    <td>{{product.price}}</td>
+                                    <td >
                                         <span v-for="(category, index) in product.category" :key="index" class="badge bg-warning text-dark rounded-pill">
                                             {{category}}
                                         </span>
                                     </td>
-                                    <td>{{product.rating}}</td>
-                                    <td>{{product.discount}}</td>
-                                    <td>{{product.price}}</td>
                                     <td v-for="(tag, index) in product.tag" :key="index">
                                         <span class="badge bg-success text-light rounded-pill">{{tag}}</span>
                                     </td>   
                                     
-                                    <td class="col-sm-2"><img :src="product.image[0]" alt="" class="col-sm-4"></td>
+                                    <td class="col-sm-1"><img :src="product.image[0]" alt="" class="col-12"></td>
                                     <td>
-                                        <button @click="setProductId(product._id)" data-bs-toggle="modal" data-bs-target="#deleteProduct" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                        <button @click="goToProduct(product._id)" class="btn btn-warning offset-sm-1" data-bs-toggle="modal" data-bs-target="#modify-product"><i class="fas fa-edit"></i></button>
-                                        <button @click="getComments(product.comments)" class="btn btn-primary offset-sm-1" data-bs-toggle="modal" data-bs-target="#comments"><i class="fas fa-comments"></i></button>
+                                        <div class="container">
+                                            <div class="row">
+                                            <div class="col-4"> 
+                                                <button @click="setProductId(product._id)" data-bs-toggle="modal" data-bs-target="#deleteProduct" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                            </div>
+                                            <div class="col-4">
+                                                <button @click="goToProduct(product._id)" class="btn btn-warning offset-sm-1" data-bs-toggle="modal" data-bs-target="#modify-product"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                            <div class="col-4">
+                                                <Comments :product_id="product._id" :isComment="isComment" :comments="comments" />
+                                                <button @click="getComments(product.comments)" class="btn btn-primary offset-sm-1" data-bs-toggle="modal" data-bs-target="#comments"><i class="fas fa-comments"></i> {{product.comments.length}} </button>
+                                            </div>
+                                        </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -73,7 +95,7 @@
                             </ul>
                         </nav>
                     </div>
-                    <Comments :isComment="isComment" :comments="comments" />
+
                     <div class="modal fade" id="deleteProduct" tabindex="-1" aria-labelledby="deleteProduct" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -145,14 +167,7 @@
                     this.next = this.next+1;
                     this.products = this.all_products[this.next];
                 }
-                /* this.index_table = this.next;
-                if (this.all_products.length>=this.index_table+1) {
-                    this.products = this.all_products[this.next];
-                    this.previous = this.next-1;
-                    this.next = this.next+1;   
-                    console.log(this.next);
-                    console.log(this.previous);
-                } */
+              
             },
             switchTable(index){
                 this.products = this.all_products[index];
@@ -177,11 +192,25 @@
             },
             goToProduct(id){
                 this.$store.commit("setProductId", id);
-                this.$router.push(`/admin/products/Modification/${id}`);
+                this.$router.push(`/products/Modification/${id}`);
             },
             getComments(comments){
                 this.comments = comments;
                 this.isComment = this.comments == undefined || this.comments == [] ? false : true;
+            },
+            countProduct(product){
+                let total = 0;
+                product.variation.forEach(element => {
+                    element.size.forEach(variationSize=> total += variationSize.stock )
+                });
+                return total;
+            },
+             countProductsSold(products){
+                let total = 0;
+                products.forEach(element => {
+                    total += element.saleCount;
+                });
+                return total;
             }
         }
     }
@@ -195,6 +224,15 @@
         -webkit-user-select: none;
         -moz-user-select: none;
         user-select: none;
+      }
+      td{
+          padding:5px !important;
+      }
+      tr{
+          margin-bottom:5px !important;
+      }
+      .top-pills{
+          margin-left: 5px;
       }
 
       @media (min-width: 768px) {

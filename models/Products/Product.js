@@ -12,6 +12,9 @@ const ProductVariationSchema = new Schema({
         type: String,
         // required:true,
     },
+    colorCode:{
+        type:String
+    },
     image: {type: String, required: true},
     size: [
         {
@@ -97,7 +100,7 @@ ProductSchema.pre('remove', function (next) {
 ProductSchema.pre('save', function (next) {
 
     if (this.discount) {
-        this.salePrice = this.price * (this.discount / 100)
+        this.salePrice = this.salePrice - (this.price * (this.discount / 100))
     }
 
     next();

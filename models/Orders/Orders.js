@@ -41,19 +41,10 @@ const OrdersSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'users',
     },
-    isPayed: {
-        type: Boolean,
-        required: true
-    },
     paymentStatus:{
         type:Schema.Types.ObjectId,
         ref:"ProductTransactionsNew",
     },
-    currency:{
-        type:String,
-        required:true
-    },
-
     country:{
         type:String,
     },
@@ -62,10 +53,6 @@ const OrdersSchema = new Schema({
     },
     name:{
         type:String,
-    },
-    amount:{
-        type: Number,
-        required:true
     }
 
 });

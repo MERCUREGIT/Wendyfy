@@ -14,7 +14,7 @@ const FooterCopyright = ({strings, footerLogo, spaceBottomClass, colorClass }) =
        {strings["powered_by"] } <strong> Mercury-Tech</strong>
       <div className="footer-logo">
         <Link to={process.env.PUBLIC_URL + "/"}>
-          <img  alt="" src={process.env.PUBLIC_URL + footerLogo} />
+          <img style={{width:"100px"}}  alt="" src={process.env.PUBLIC_URL + footerLogo} />
           
         </Link>
       </div>

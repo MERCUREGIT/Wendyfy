@@ -11,21 +11,9 @@ const {isEmpty, multiImageUplaod, eCommerceUploadDir} = require('../../helpers/u
 const {verifyToken} = require('../../helpers/authentication');
 
 
-router.post('/', (req, res) => {
-// console.log(req.files)
-
-    /*let initVar = JSON.parse(req.body.variations);
-        console.log(req.body)*/
+router.post('/',verifyToken, (req, res) => {
     if (req.isAdmin) {
         try {
-            /*initVar.forEach((element,index,variations)=>{
-                element.image = multiImageUplaod( Array.isArray(req.files.variation_image)?
-                req.files.variation_image[index] : req.files.variation_image,'Ecommerce/products');
-
-                variations[index] = element;
-                initVar = variations;
-            })*/
-
             let images = [];
 
             let variation = req.body.variations.map(va => {
@@ -34,6 +22,7 @@ router.post('/', (req, res) => {
                     color: va.color,
                     image: va.image,
                     size: va.size,
+                    colorCode: va.colorCode
                 }
             })
             images.push(req.body.image); //add product image
@@ -56,16 +45,20 @@ router.post('/', (req, res) => {
             product.shortDescription = req.body.shortDescription;
             product.fullDescription = req.body.fullDescription;
             product.allowComments = allowComments;
-            product.save().then(() => {
+            product.save().then((createdProduct) => {
+                console.log(createdProduct);
                 res.status(200).send(true)
             }).catch(err => {
-                res.status(500).json(err)
+                if(err.code === 11000){
+                    const error = Error(` ${Object.keys(err.keyValue)}  du produit "${err.keyValue[Object.keys(err.keyValue)[0]]}" non disponible ou déja utilisé`);
+                    res.status(400).json({err: error.message.toString(), success: false});
+                }
             });
         } catch (err) {
             res.status(400).json(err)
         }
     } else {
-        res.status(404).send("No privileg autorized")
+        res.status(403).send("No privileg autorized")
     }
 });
 
@@ -136,6 +129,9 @@ router.delete('/:product_id', (req, res) => {
 
 
 router.put('/edit/:product_id', verifyToken, (req, res) => {
+        console.log(req.body);
+
+
         if (req.isAdmin) {
             let images = [];
             let variation = req.body.variations.map(va => {

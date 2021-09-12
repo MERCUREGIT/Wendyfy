@@ -63,7 +63,7 @@ export default {
       });
     },
     goToMail:function (id) {
-      this.$router.push("/admin/Clients/mail/"+id)
+      this.$router.push("/Clients/mail/"+id)
     }
   },
   mounted() {
