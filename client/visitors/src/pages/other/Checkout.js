@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import React, {Fragment, useState} from "react";
 import {Link,useHistory} from "react-router-dom";
 import MetaTags from "react-meta-tags";
+import validator from 'validator' ;
 import {connect} from "react-redux";
 import {BreadcrumbsItem} from "react-breadcrumbs-dynamic";
 import {getDiscountPrice} from "../../helpers/product";
@@ -15,6 +16,13 @@ import LoadingOverlay from 'react-loading-overlay';
 import {deleteAllFromCart} from "../../redux/actions/cartActions";
 import { ToastContainer, toast } from 'react-toastify';
 const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCart}) => {
+
+    const validatePhoneNumber = (number) => {
+        const isValidPhoneNumber = validator.isMobilePhone(number)
+        return (isValidPhoneNumber)
+       }
+
+
     let addToast=toast.error;
     const {pathname} = location;
     let cartTotalPrice = 0;
@@ -22,6 +30,7 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
     const [name, handleName] = useState(user.username !== "" ? user.username : "");
     const [country, handleCountry] = useState('');
     const [tel, handleTel] = useState('');
+    const [telIsValid, handleTelIsValid] = useState(false);
     const [city, handleCity] = useState('');
     const paymentDetails = {};
     const [isLoading, setIsLoading] = useState(false);
@@ -33,20 +42,19 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
         apikey: '8936433616017f33cc7a2b9.78720038',
         site_id: 302789,
         notify_url: routes.notify_url_cinetpay,
-        return_url:"http://localhost:5000/order/notify",
+        // return_url:"http://localhost:5000/order/notify",
         cancel:"https/wendyfy.com/listener",
     });
 
     const handlePayment = async () => {
 
-       if( name !=="" && tel !=='' && country !== '' && city !=='' ){
+       if( name !=="" && telIsValid && country !== '' && city !=='' ){
         if (isLoading) {
             return;
         }
         if(order._id){
             CinetPay.setSignatureData({
-                // amount: parseInt(document.getElementById('amount').value),
-                amount: 100,
+                amount: parseInt(document.getElementById('amount').value),
                 trans_id: document.getElementById('trans_id').value,
                 currency: document.getElementById('currency').value,
                 designation: document.getElementById('designation').value,
@@ -65,16 +73,14 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             productOrders: cartItems,
             id: user.userid,
             currency: currency.currencySymbol,
-            // amount: cartTotalPrice.toFixed(2)
-            amount: 100
+            amount: cartTotalPrice.toFixed(2)
         };
         axios.get(`${routes.server}/order/signature`)
             .then(r => {
             setOrder(r.data)
             payload.signature = r.data._id;
             CinetPay.setSignatureData({
-                // amount: parseInt(document.getElementById('amount').value),
-                amount: 100,
+                amount: parseInt(document.getElementById('amount').value),
                 trans_id: document.getElementById('trans_id').value,
                 currency: document.getElementById('currency').value,
                 designation: document.getElementById('designation').value,
@@ -87,32 +93,6 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
             history.push("/checkout")
         }).finally(e => {
         });
-        // payload.paymentDetails = 
-        // {cpm_site_id: "296911",
-        //         signature: "4dfbf5b8f40818abffe754b8a8aa04e4d29af25f",
-        //         cpm_amount: "11",
-        //         cpm_trans_date: "04092017140045",
-        //         cpm_trans_id: "50445985950",
-        //         cpm_custom: "08373459U",
-        //         cpm_currency: "XOF",
-        //         cpm_payid: "MP170904.1401.A91088",
-        //         cpm_payment_date: "2017-09-04",
-        //         cpm_payment_time: "14:01:35",
-        //         cpm_error_message: "SUCCES",
-        //         payment_method: "OM",
-        //         cpm_phone_prefixe: "225",
-        //         cel_phone_num: "79557788",
-        //         cpm_ipn_ack: "Y",
-        //         created_at: "2017-09-04 14:00:54",
-        //         updated_at: "2017-09-04 14:01:06",
-        //         cpm_result: "00",
-        //         cpm_trans_status: "ACCEPTED",
-        //         cpm_designation: "Test",
-        //         buyer_name: ""}
-
-        
-        // axios.post(`${routes.server}/order/`, JSON.stringify(payload),  { headers: { 'Content-Type' : 'application/json',"Access-Control-Allow-Origin": "*", }})
-
         CinetPay.on('error', function (e) {
             setIsLoading(false)
             addToast(strings['subs_connection_error'] + "Errore code :"+ e.code +"Message :" + e.message )
@@ -133,31 +113,6 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                     toast.success(strings['payment_completed'])
                     console.log(paymentInfo)
                     payload.paymentDetails = paymentInfo;
-                    /**
-                        buyer_name: ""
-                        cel_phone_num: "692519381"
-                        cpm_amount: "100"
-                        cpm_currency: "XAF"
-                        cpm_custom: ""
-                        cpm_designation: "payment_for_order - #612e7de7b2509f3150872d63"
-                        cpm_error_message: "SUCCES"
-                        cpm_ipn_ack: "N"
-                        cpm_payid: "MP210831.2009.B90332"
-                        cpm_payment_date: "2021-08-31"
-                        cpm_payment_time: "19:09:17"
-                        cpm_phone_prefixe: "237"
-                        cpm_result: "00"
-                        cpm_site_id: "302789"
-                        cpm_trans_date: "31082021190719"
-                        cpm_trans_id: "612e7de7b2509f3150872d63"
-                        cpm_trans_status: "ACCEPTED"
-                        created_at: "2021-08-31 19:09:17"
-                        lastTime: "ok"
-                        payment_method: "OMCM"
-                        signature: "a1b3be0a6aa051d50d939e294efde5af21a8dbcf1548452aff4717b3f2f0415810909"
-                        updated_at: "2021-08-31 19:09:18"
-
-                     */
                     axios.post(`${routes.server}/order/`, JSON.stringify(payload),  { headers: { 'Content-Type' : 'application/json',"Access-Control-Allow-Origin": "*", }})
                     deleteAllFromCart(false)
                     history.push("/my-account")
@@ -176,6 +131,8 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
 
        
     }
+
+
 
     return (
         <Fragment>
@@ -212,8 +169,22 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                                             <div className="col-lg-12 col-md-12">
                                                 <div className="billing-info mb-20">
                                                     <label>{strings['user_tel']}</label>
-                                                    <input type="number" value={tel}
-                                                           onChange={e => handleTel(e.target.value)}/>
+                                                   {!telIsValid && tel !=='' ? <span style={{color:"red"}}>
+                                                       <br/>
+                                                       Numero de telepphone n'est pas valide</span> : ""}
+                                                    <input type="text" value={tel}
+                                                           onChange={e =>{
+                                                                handleTel(e.target.value)
+                                                               if(validatePhoneNumber(e.target.value)){
+                                                                handleTelIsValid(true);
+                                                                return
+                                                               }
+                                                               
+                                                               handleTelIsValid(false)
+                                                            //    set that its bad number
+                                                              }
+                                                              
+                                                              }/>
                                                 </div>
                                             </div>
                                             <div className="col-lg-12">
@@ -233,7 +204,6 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div className="col-lg-5">
@@ -271,7 +241,7 @@ const Checkout = ({location, cartItems, currency, user, strings,deleteAllFromCar
                                   <span className="order-middle-left">
                                     {cartItem.name} X {cartItem.quantity}
                                   </span>{" "}
-                                                                    <span className="order-price">
+                                <span className="order-price">
                                     {discountedPrice !== null
                                         ? currency.currencySymbol +
                                         (

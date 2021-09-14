@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React, {Fragment, useEffect, useState} from "react";
 import MetaTags from "react-meta-tags";
 import {BreadcrumbsItem} from "react-breadcrumbs-dynamic";
-import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table"
 import Accordion from "react-bootstrap/Accordion";
 import LayoutOne from "../../layouts/LayoutOne";
@@ -26,7 +25,7 @@ const MyAccount = ({location, authentication, strings}) => {
                 <title>wendyfy | My Account</title>
                 <meta
                     name="description"
-                    content="Compare page of flone react minimalist eCommerce template."
+                    content="Compare page of wendy eCommerce site."
                 />
             </MetaTags>
             <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>{strings['my_account']}</BreadcrumbsItem>
@@ -39,7 +38,7 @@ const MyAccount = ({location, authentication, strings}) => {
                 <Breadcrumb/>
                 <div className="myaccount-area pb-80 pt-100">
                     <div className="container">
-                        <div className="row">
+                        <div className="row justify-content-center">
                             <div className="ml-auto mr-auto col-lg-9">
                                 <div className="myaccount-wrapper">
                                     <Accordion defaultActiveKey="0">
@@ -64,7 +63,7 @@ MyAccount.propTypes = {
 };
 
 
-export const AccountUserProfile = ({authentication, strings}) => {
+ const AccountUserProfile = ({authentication, strings}) => {
 
     const initialState =  {
         username:authentication.username,
@@ -77,18 +76,10 @@ export const AccountUserProfile = ({authentication, strings}) => {
     const [editAccountContinue, setIsEditAccountContinue] = useState(false)
     const [accountDetails, setAccountDetails] = useState(initialState)
    
-    return <Card className="single-my-account mb-20">
-        <Card.Header className="panel-heading">
-            <Accordion.Toggle variant="link" eventKey="0">
-                <h3 className="panel-title">
-                    <span></span> {strings['edit_account_information']}{" "}
-                </h3>
-            </Accordion.Toggle>
-           
-        </Card.Header>
+    return <Accordion.Item eventKey="0">           
+        <Accordion.Header> {strings['edit_account_information']}{" "}</Accordion.Header>
         <ToastContainer />
-        <Accordion.Collapse eventKey="0">
-            <Card.Body>
+        <Accordion.Body>
                 <div className="myaccount-info-wrapper">
                     <div className="account-info-wrapper">
                         <div className ="container">
@@ -188,37 +179,40 @@ export const AccountUserProfile = ({authentication, strings}) => {
                         </div>    
                     }
                 </div> : ""}
-            </Card.Body>
-        </Accordion.Collapse>
-    </Card>
+        </Accordion.Body>
+    </Accordion.Item >
 }
 
-export const UserOrders = ({authentication, strings}) => {
+ const UserOrders = ({authentication, strings}) => {
     const [loading, setLoading] = useState(true)
     const [error, setIsError] = useState(false)
     const [orders, setOrder] = useState([])
 
+
     useEffect(()=>{
-       axios.get(`${routes.server}/order/transactions/${authentication.userid}`)
+        if(loading){
+        axios.get(`${routes.server}/order/transactions/${authentication.userid}`)
        .then((r)=>{
         //    console.log(r.data)
         setOrder(r.data)
         setLoading(!loading)})
         .catch(err=>{
             setIsError(!error)
+            setLoading(!loading)
         })
-    },[authentication.userid,error,loading])
-    return <Card className="single-my-account mb-20">
+       
+    
+    }
+        else{
+
+        }
+    },[authentication.userid,error,loading, orders])
+    return <Accordion.Item eventKey="1">
         <ToastContainer/>
-        <Card.Header className="panel-heading">
-            <Accordion.Toggle variant="link" eventKey="2">
-                <h3 className="panel-title">
+        <Accordion.Header className="panel-heading">
                     {strings['your_orders']}
-                </h3>
-            </Accordion.Toggle>
-        </Card.Header>
-        <Accordion.Collapse eventKey="2">
-            <Card.Body>
+        </Accordion.Header>
+            <Accordion.Body>
                 <div className="container">
                     <div className="col-lg-12 col-md-12">
                         {loading && <center><p>{strings['loading']}...</p></center>}
@@ -238,12 +232,11 @@ export const UserOrders = ({authentication, strings}) => {
                         </Table>
                     </div>
                 </div>
-            </Card.Body>
-        </Accordion.Collapse>
-    </Card>
+            </Accordion.Body>
+    </Accordion.Item >
 }
 
-export const UserSingleTransaction = ({order, strings}) => {
+const UserSingleTransaction = ({order, strings}) => {
     const [seeDetails, setSeedetails] = useState(false)
 
     const filterOrder = (productVariation =[], orderVariations)=>{
@@ -274,7 +267,7 @@ export const UserSingleTransaction = ({order, strings}) => {
                         <div  className="container">
                             <div className="row">
                                 <div className="col-md-4 col-12">
-                                    <img style={{width:"100%"}} alt='main product' src = {el.productRef.image[0]} />
+                                    <img style={{width:"100%"}} alt='main product' src = { el.productRef.image[0]} />
                                 </div>
                                 <div  className="col-md-8 col-12">
                                     <span><h4> <strong>{strings["product_name"]} </strong> : {el.productRef.name}</h4> </span>
@@ -288,7 +281,7 @@ export const UserSingleTransaction = ({order, strings}) => {
                                        return <div key={uuid()} className="container shadow rounded">
                                             <div className="row">
                                                 <div className="col-md-5 col-12">
-                                                    <img alt='product variation' style={{maxWidth:"100%"}} src = {variation.image} />
+                                                    <img alt='product variation' style={{maxWidth:"100%"}} src = {variation.image || ""} />
                                                 </div>
                                                 <div className="col-md-7 col-12 my-auto">
                                                 <span><strong style={{color:"grey"}}>{strings["size"]} </strong> : {variation.sizeName} </span>
@@ -324,17 +317,12 @@ const UserSpecialOrders = ({authentication, strings}) => {
         })
     },[authentication.userid] )
   
-    return <Card className="single-my-account mb-20">
+    return <Accordion.Item eventKey="2">
         <ToastContainer/>
-        <Card.Header className="panel-heading">
-            <Accordion.Toggle variant="link" eventKey="3">
-                <h3 className="panel-title">
-                    <span></span> {strings['take_measures']}
-                </h3>
-            </Accordion.Toggle>
-        </Card.Header>
-        <Accordion.Collapse eventKey="3">
-            <Card.Body>
+        <Accordion.Header className="panel-heading">
+           {strings['take_measures']}
+        </Accordion.Header>
+            <Accordion.Body>
                 <div className="container">
                     <div className="col-lg-12 col-md-12">
                         <Table striped bordered hover>
@@ -351,9 +339,8 @@ const UserSpecialOrders = ({authentication, strings}) => {
                         </Table>
                     </div>
                 </div>
-            </Card.Body>
-        </Accordion.Collapse>
-    </Card>
+            </Accordion.Body>
+    </Accordion.Item>
 }
 
 

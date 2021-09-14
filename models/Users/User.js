@@ -7,20 +7,20 @@ const UserSchema = new Schema({
     username: {
         type: String,
         required: [true,"User name required"],
-        unique: [true, "User name taken"]
+        unique: true
     },
     email: {
         type: String,
         required: true,
-        unique: [true, "User email taken"]
+        unique: true
     },
     telephone: {
         type: String,
-        required: true,
+        required: [true,"le numero de telephone est requis"],
     },
     password: {
         type: String,
-        required: true,
+        required: [true, "le mots de passe du compte est requis"],
     },
     userRole:{
         type: String,
@@ -31,9 +31,7 @@ const UserSchema = new Schema({
 });
 
 UserSchema.statics.login = async function (email, password) {
-    console.log(email, password)
     const user = await this.findOne({email});
-    console.log(user._id, user.username)
     if(user) {
      const auth= await  bcrypt.compare(password, user.password)
      if(auth){

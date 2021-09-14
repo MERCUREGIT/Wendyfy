@@ -13,7 +13,7 @@ const RecentBlogPostWrapper= ({post, strings})=>{
         <hr/>
         <div className="row justify-content-center">
         {  sortedPostList.slice(0,3).map(post=>{
-        return <div key={post._id} className="col-6 col-lg-3 col-md-4 col-sm-6">
+        return <div key={post._id} className="col-12 col-lg-3 col-md-4 col-sm-6">
             <div className="blog-wrap-2 mb-30">
                 <div className="blog-img-2">
                     <Link to={process.env.PUBLIC_URL + `/blog-details-standard/${post._id}`}>

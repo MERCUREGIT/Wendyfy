@@ -13,6 +13,7 @@ import rootReducer from "./redux/reducers/rootReducer";
 import products from "./data/products.json";
 import App from "./App";
 import "./assets/scss/style.scss";
+import ErrorBoundary from './ErrorBoundary'
 import "./assets/css/style.css";
 import * as serviceWorker from "./serviceWorker";
 
@@ -34,7 +35,9 @@ store.dispatch(fetchSlider());
 
 ReactDOM.render(
   <Provider store={store}>
+    <ErrorBoundary>
       <App />
+    </ErrorBoundary>
   </Provider>,
   document.getElementById("root")
 );

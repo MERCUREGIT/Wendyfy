@@ -48,7 +48,8 @@
     "redux-thunk": "^2.3.0",
     "swiper": "^5.2.0",
     "universal-cookie": "^4.0.4",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "validator": "^13.6.0"
   },
   "scripts": {
     "start": "react-scripts start",

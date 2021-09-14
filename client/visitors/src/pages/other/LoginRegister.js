@@ -5,6 +5,7 @@ import {useHistory} from "react-router-dom";
 import {useToasts} from "react-toast-notifications";
 import {BreadcrumbsItem} from "react-breadcrumbs-dynamic";
 import Tab from "react-bootstrap/Tab";
+import validator from 'validator' ;
 import Nav from "react-bootstrap/Nav";
 import {connect} from "react-redux";
 import LayoutOne from "../../layouts/LayoutOne";
@@ -16,14 +17,20 @@ import Loader from "react-loader-spinner";
 import {multilanguage} from "redux-multilanguage";
 
 const LoginRegister = ({location, login, register, successLogin,strings}) => {
+
+    const validatePhoneNumber = (number) => {
+        const isValidPhoneNumber = validator.isMobilePhone(number)
+        return (isValidPhoneNumber)
+       }
+
     let history = useHistory();
     const {addToast} = useToasts();
-
+    const [telIsValid, handleTelIsValid] = useState(false);
     const {pathname} = location;
     const [userName, userNameHandler] = useState("")
     const [password, passwordHandler] = useState("")
-    const [email, emailHandler] = useState("")
-    const [telephone, telephoneHandler] = useState(0)
+    const [email, emailHandler] = useState()
+    const [telephone, telephoneHandler] = useState()
     const [loading, setLoading] = useState(false)
     const [error1, setError1] = useState('')
     const [error2, setError2] = useState('')
@@ -53,7 +60,12 @@ const LoginRegister = ({location, login, register, successLogin,strings}) => {
                 }
             }).catch(e => {
                 // if(typeof e.)
-            setError1(strings["lr_try_again"])
+            if (e.response.data){
+                setError1(e.response.data.err)
+            } else{
+                setError1(strings["lr_try_again"])
+            }
+           
         }).finally(() => {
             setLoading(false)
         })
@@ -77,7 +89,13 @@ const LoginRegister = ({location, login, register, successLogin,strings}) => {
 
                 }
             }).catch(e => {
-            setError2(strings['lr_try_again'])
+               
+                if (e.response.data){
+                    console.log(e.response.data.err)
+                    setError2(e.response.data.err)
+                } else{
+                    setError2(strings["lr_try_again"])
+                }
         }).finally(() => {
             setLoading(false)
         })
@@ -102,7 +120,7 @@ const LoginRegister = ({location, login, register, successLogin,strings}) => {
                 <Breadcrumb/>
                 <div className="login-register-area pt-100 pb-100">
                     <div className="container">
-                        <div className="row">
+                        <div className="row justify-content-center">
                             <div className="col-lg-7 col-md-12 ml-auto mr-auto">
                                 <div className="login-register-wrapper">
                                     <Tab.Container defaultActiveKey="login">
@@ -141,13 +159,6 @@ const LoginRegister = ({location, login, register, successLogin,strings}) => {
                                                                 onChange={e => passwordHandler(e.target.value)}
                                                             />
                                                             <div className="button-box">
-                                                               {/* <div className="login-toggle-btn">
-                                                                    <input type="checkbox"/>
-                                                                    <label className="ml-10">{strings['lr_remember_me']}</label>
-                                                                    <Link to={process.env.PUBLIC_URL + "/"}>
-                                                                        {strings['lr_password_forgotten']}
-                                                                    </Link>
-                                                                </div>*/}
                                                                 {error1 && <p style={{color: "red"}}>{error1}</p>}
                                                                 <button type="submit">
                                                                     {loading ? <Loader
@@ -177,12 +188,26 @@ const LoginRegister = ({location, login, register, successLogin,strings}) => {
                                                                 value={userName}
                                                                 onChange={e => userNameHandler(e.target.value)}
                                                             />
+                                                              {!telIsValid && telephone !=='' ? <span style={{color:"red"}}>
+                                                                <br/>
+                                                                Numero de telepphone n'est pas valide</span> : ""}
                                                             <input
-                                                                type="number"
+                                                                type="text"
                                                                 name="user-telephone"
                                                                 value={telephone}
+                                                                data-fv-field="phone_num"
                                                                 placeholder={strings['lr_userphonenumber']}
-                                                                onChange={e => telephoneHandler(e.target.value)}
+                                                                // pattern ='(\+237|\237)\s(6|2)(2|3|[5-9])[0-9]{7}'
+                                                                onChange={e =>{
+                                                                        telephoneHandler(e.target.value)
+                                                                       if(validatePhoneNumber(e.target.value)){
+                                                                        handleTelIsValid(true);
+                                                                        return
+                                                                       }
+                                                                       
+                                                                       handleTelIsValid(false)
+                                                                    //    set that its bad number
+                                                                 }}
                                                             />
                                                             <input
                                                                 type="password"

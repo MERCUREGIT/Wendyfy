@@ -9,7 +9,6 @@ const mongoose = require('mongoose');
 const { tokenGenerator, logout , maxAgeAccessToken} = require('../../helpers/authentication');
 
 const User = require("../../models/Users/User");
-const { UserBindingInstance } = require('twilio/lib/rest/chat/v2/service/user/userBinding');
 
 
 
@@ -50,12 +49,13 @@ router.post('/login',async (req, res)=>{
         }
         else
         {
-            res.status(401).json({"error":"Invalid user account"})
+            res.status(401).json({"err":"Invalid user account"})
         }
     }
     catch (error)
     {
-        res.status(405).json({err:error.toString()})
+        console.log(error)
+        res.status(405).json({err:error.message})
     }
 });
 
@@ -63,7 +63,6 @@ router.post('/login',async (req, res)=>{
 //############################# SIGNUP ##########################################""""
 
 router.post("/sign-up",(req,res)=>{
-    console.log("from front end", req)
     try
     {
         const newUser = new User({
@@ -83,12 +82,16 @@ router.post("/sign-up",(req,res)=>{
             res.status(200).json({user:user._id, username:user.username, email:user.email, role: user.role,...userTokens, success: true});
 
         }).catch(err=>{
-            console.log(err)
             if(err.code === 11000){
-                const error = Error(` ${Object.keys(err.keyValue)}  d'utilisateur ${err.keyValue[Object.keys(err.keyValue)[0]]} non disponible`);
-                res.status(400).json({err: error.message.toString(), success: false});
+                if(Object.keys(err.keyValue)[0] === "username"){
+                    res.status(400).json({err: "Nom d'utilisateur déja pris ou non disponible", success: false})
+                }
+                if(Object.keys(err.keyValue)[0] ==="email"){
+                   
+                    res.status(400).json({err: " Email déja pris ou non disponible", success: false})
+                }
             }
-           
+            else res.status(500)
         });
     }
     catch (error)
@@ -167,8 +170,10 @@ router.post("/user/edit/:user_id",(req,res)=>{
             if(err) {
                 res.status(500).send(err);
             } else {
-                if(req.body.password && req.body.password !== ''){
-                    user.password = req.body.password;
+                console.log("User found before editing :", user)
+                if(req.body.newPassword && req.body.newPassword !== ''){
+                    console.log("this run")
+                    user.password = req.body.newPassword;
                 }
                 user.save((err)=>{
                     if(err){}
@@ -176,7 +181,6 @@ router.post("/user/edit/:user_id",(req,res)=>{
                         res.status(200).send({user, success:true});
                     }
                 })
-                
             }
          });
     }

@@ -8,7 +8,8 @@ const initState = {
 
 const currencyReducer = (state = initState, action) => {
   if (action.type === SET_CURRENCY) {
-    const currencyName = action.payload.currencyName;
+    // const currencyName = action.payload.currencyName;
+    const currencyName = "FCFA";
     if (currencyName === "USD") {
       return {
         ...state,
