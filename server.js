@@ -29,6 +29,7 @@ app.use(morgan('combined', { stream: logger.stream.write }));
 // app.options('*', cors(corsOptions));
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'client', 'visitors', 'build')));
+app.use(express.static(path.join(__dirname, 'client', 'admin', 'dist')));
 
 app.use('/api/public/Ecommerce/Slider',express.static('public/Ecommerce/Slider'));
 app.use('/api/public/Blog',express.static('public/Blog'));
@@ -44,16 +45,21 @@ app.use(upload());
 
 
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client','visitors','build', 'index.html'));
-});
-app.get('/admin', (req, res) => {
-  res.send('test working examples for admin route');
-});
+
+
 
 
 require('./routes/routes')(app);
 
+app.get('/admin', (req, res) => {
+  console.log("admin called")
+  res.sendFile(path.join(__dirname, 'client','admin','dist', 'index.html'));
+});
+
+app.get('*', (req, res) => {
+  console.log("visitors called")
+  res.sendFile(path.join(__dirname, 'client','visitors','build', 'index.html'));
+});
 app.post('/upload', function (req, res, next) {
   let sampleFile;
   let uploadPath;
