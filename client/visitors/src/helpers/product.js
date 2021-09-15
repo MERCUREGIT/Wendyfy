@@ -1,5 +1,6 @@
 // get products
 export const getProducts = (products, category, type, limit) => {
+  console.log('Fetched products', products);
   const finalProducts = products
     ? products.filter(
         product => product.category.filter(single => single === category)[0]
@@ -9,8 +10,7 @@ export const getProducts = (products, category, type, limit) => {
   if (type && type === "new") {
     const newProducts = products.filter(single => {
       var Difference_In_Time = new Date() - new Date(single.date).getTime();
-      console.log("time difference", Difference_In_Time)
-      if((Difference_In_Time / (1000 * 3600 * 24))<5) {
+      if((Difference_In_Time / (1000 * 3600 * 24))<7) {
         return true
       }
       return false

@@ -15,9 +15,8 @@ const LanguageCurrencyChanger = ({
   };
 
   const setCurrencyTrigger = e => {
-    const currencyName = e.target.value;
-    console.log(currencyName)
-    setCurrency(currencyName);
+    // const currencyName = e.target.value;
+    setCurrency("FCFA");
   };
 
   return (
