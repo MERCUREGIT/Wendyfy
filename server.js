@@ -52,12 +52,10 @@ app.use(upload());
 require('./routes/routes')(app);
 
 app.get('/admin', (req, res) => {
-  console.log("admin called")
   res.sendFile(path.join(__dirname, 'client','admin','dist', 'index.html'));
 });
 
 app.get('*', (req, res) => {
-  console.log("visitors called")
   res.sendFile(path.join(__dirname, 'client','visitors','build', 'index.html'));
 });
 app.post('/upload', function (req, res, next) {
@@ -84,7 +82,6 @@ app.post('/upload', function (req, res, next) {
 
 app.use((error, req, res, next)=>{
   res.status(error.status || 500);
-  console.log("From general error handler",error.message)
   res.json({
     error:{
       message: error.message
