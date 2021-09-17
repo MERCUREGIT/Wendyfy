@@ -40,7 +40,6 @@ router.beforeEach((to, from, next) => {
   else if(ls === null || ls === false || typeof token === 'string') {
     if(to.path === '/404'){ next()}
     else {
-      alert('Connecter vous au Compte administrateur.');
       next('/'); }
   }
 });

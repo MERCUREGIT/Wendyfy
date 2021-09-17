@@ -45,10 +45,6 @@ app.use(upload());
 
 
 
-
-
-
-
 require('./routes/routes')(app);
 
 app.get('/admin', (req, res) => {

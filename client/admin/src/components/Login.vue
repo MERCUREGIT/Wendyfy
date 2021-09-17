@@ -11,32 +11,34 @@
                                 Nous vous conseillons de ne pas partager ces identifiants.</p>
                         </div>
                         <div class="row g-3">
-                            <div class="col-12">
-                                <label for="login" class="form-label">Nom d'utilisateur</label>
-                                <input type="text" class="form-control" id="login" v-model="login">
-                            </div>
-                            <div class="col-12">
-                                <label for="password" class="form-label">Mot de passe</label>
-                                <input type="password" class="form-control" id="password" v-model="password">
-                            </div>
-                            <div class="col-12">
-                                <div class="form-check">
-                                    <input @click="check()" name="allowComments" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                        Afficher / Masquer le mot de passe
-                                    </label>
+                            <form>
+                                <div class="col-12">
+                                    <label for="login" class="form-label">Nom d'utilisateur</label>
+                                    <input type="text"  autocomplete="username" class="form-control" id="login" v-model="login">
                                 </div>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <button @click="(e)=>submit(e)" type="button" class="btn btn-primary">
-                                    <span v-if="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    {{button_text}}
-                                </button>
-                            </div>
+                                <div class="col-12">
+                                    <label for="password"  class="form-label">Mot de passe</label>
+                                    <input type="password" autocomplete="current-password"  class="form-control" id="password" v-model="password">
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input @click="check()" name="allowComments" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Afficher / Masquer le mot de passe
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button @click="(e)=>submit(e)" type="button" class="btn btn-primary">
+                                        <span v-if="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        {{button_text}}
+                                    </button>
+                                </div>
 
-                            <div class="alert alert-danger alert-dismissible" role="alert" v-if="error">
-                                <strong>Une erreur s'est produite!</strong> Veuillez rééssayer!
-                            </div>
+                                <div class="alert alert-danger alert-dismissible" role="alert" v-if="error">
+                                    <strong>Une erreur s'est produite!</strong> Veuillez rééssayer!
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
