@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Color = require('../../../../models/Products/Details/Colors');
-const Size = require('../../../../models/Products/Details/Size');
 const { verifyToken } = require('../../../../helpers/authentication');
-const Colors = require('../../../../models/Products/Details/Colors');
 const mongoose = require('mongoose');
 
 router.all('/*', verifyToken,(req, res, next) => {

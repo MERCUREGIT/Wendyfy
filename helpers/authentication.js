@@ -17,7 +17,7 @@ module.exports = {
     },
 
     verifyToken:function (req, res, next){
-        if(typeof req.headers['authorization'] !== 'undefined')
+        if(typeof req.headers['authorization'])
             {
             const bearerToken =  req.headers['authorization'].split(' ')[1];
             jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET,(err, verification_obj)=>
