@@ -75,12 +75,13 @@
                          document.cookie += "accessToken="+res.data.accessToken;
                         if (typeof window.localStorage !==  undefined) {
                             window.localStorage.setItem("token", res.data.accessToken);
+                            window.token =  res.data.accessToken;
                             window.localStorage.setItem("username", res.data.username);
                             window.localStorage.setItem("isAdmin", true);
                                 setTimeout(()=>{
                                 alert('Please you need to log back again');
                                 axios.delete(`${config.server}/authentication/logout`).then(()=>{
-                                    this.$router.push("/");
+                                    this.$router.push("/admin");
                                     window.localStorage.removeItem("isAdmin");
                                     window.localStorage.removeItem("token");
                                     window.localStorage.removeItem("username");
@@ -88,10 +89,10 @@
                                 })
                             },60*60*1000)
                         }
-                        this.$router.push('/products')
+                        this.$router.push('/admin/products')
                     }
                     else{
-                        this.$router.push('/404');
+                        this.$router.push('/admin/404');
                         window.localStorage.setItem("isAdmin", false)
                     }
                 }).catch((error)=>{
@@ -105,7 +106,7 @@
             logout(){
             axios.delete(`${config.server}/authentication/logout`)
             .then(()=>{
-                this.$router.push("/");
+                this.$router.push("/admin");
                 window.localStorage.removeItem("isAdmin");
                 document.cookie +="accessToken"+";max-age=0"; 
             })

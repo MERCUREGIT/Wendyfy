@@ -691,7 +691,7 @@ export default {
         axios.put(`${config.server}/edit/${this.$route.params.id}`, data, {headers: {...config.headers}}).then(() => {
           toast("Creation completee")
           this.savingProduct = false;
-          this.$router.push("/products")
+          this.$router.push("/admin/products")
         }).catch((error) => {
           this.savingProduct = false;
           this.reqError = error.response.data.err
@@ -703,7 +703,7 @@ export default {
       axios.post(`${config.server}/`, data, {headers: {...config.headers}}).then(() => {
         toast("Creation completee")
         this.savingProduct = false;
-        this.$router.push("/products")
+        this.$router.push("/admin/products")
       }).catch((error) => {
         this.savingProduct = false;
         this.reqError = error.response.data.err

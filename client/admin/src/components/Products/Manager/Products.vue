@@ -192,7 +192,7 @@
             },
             goToProduct(id){
                 this.$store.commit("setProductId", id);
-                this.$router.push(`/products/Modification/${id}`);
+                this.$router.push(`/admin/products/Modification/${id}`);
             },
             getComments(comments){
                 this.comments = comments;

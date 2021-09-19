@@ -141,7 +141,7 @@ export default {
   },
   methods: {
    openBlog(id){
-     this.$router.push("/Blog/Modification/"+id)
+     this.$router.push("/admin/Blog/Modification/"+id)
    },
     getMonthStr(month) {
       return getMonth(month)

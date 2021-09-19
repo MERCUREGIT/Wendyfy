@@ -1,3 +1,5 @@
+process.env.NODE_ENV = "production";
+
 module.exports = function (mongooseInstance){
     let env = process.env.NODE_ENV || 'development';
 

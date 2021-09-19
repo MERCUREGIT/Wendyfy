@@ -219,7 +219,7 @@ export default {
       } else {
         let product_values = this.manageFormData();
         axios.post(`${config.server}/`, product_values, {headers: {...config.headers}, 'Content-Type': 'multipart/form-data'}).then(()=>{
-          this.$router.push('/products');
+          this.$router.push('/admin/products');
         }).catch((error)=>{
           console.log(error);
           this.error=true;

@@ -18,26 +18,26 @@ import Slider from './components/Slider/Slider.vue'
 import PageNotFound from  './components/others/PageNotFound.vue'
 import UserPage from  './components/others/UserPage.vue'
 export default[
-    {path : '/', component : Login},
-    {path: '/products', component: Products},
-    {path: '/products/New', component: NewProduct},
-    {path: '/products/New2', component: NewProduct2},//the old route
-    {path: '/products/Modification/:id', component: NewProduct},
-    {path: '/products/Modification2/:id', component: ModifyProduct},
-    {path: '/Measures', component: Measures},
-    {path: '/Orders', component: Orders},
-    {path: '/Clients', component: Clients},
-    {path: '/Clients/mail', component: ClientMail},
-    {path: '/Clients/mail/:id', component: ClientMail},
-    {path: '/newsletter', component: Subscribers},
-    {path: '/newsletter/mail', component: NsCreateMail},
-    {path: '/newsletter/mail/:id', component: NsCreateMail},
-    {path: '/contact', component: Contact},
-    {path: '/Blog', component: Blog},
-    {path: '/Blog/New', component: NewBlog},
-    {path: '/Blog/Modification/:id', component: NewBlog},
-    {path: '/Slider', component: Slider},
-    {path: '/transactions', component: Accounting},
-    {path: '/user-page', component: UserPage},
-    {path: '/404', component: PageNotFound}
+    {path : '/admin/', component : Login},
+    {path: '/admin/products', component: Products},
+    {path: '/admin/products/New', component: NewProduct},
+    {path: '/admin/products/New2', component: NewProduct2},//the old route
+    {path: '/admin/products/Modification/:id', component: NewProduct},
+    {path: '/admin/products/Modification2/:id', component: ModifyProduct},
+    {path: '/admin/Measures', component: Measures},
+    {path: '/admin/Orders', component: Orders},
+    {path: '/admin/Clients', component: Clients},
+    {path: '/admin/Clients/mail', component: ClientMail},
+    {path: '/admin/Clients/mail/:id', component: ClientMail},
+    {path: '/admin/newsletter', component: Subscribers},
+    {path: '/admin/newsletter/mail', component: NsCreateMail},
+    {path: '/admin/newsletter/mail/:id', component: NsCreateMail},
+    {path: '/admin/contact', component: Contact},
+    {path: '/admin/Blog', component: Blog},
+    {path: '/admin/Blog/New', component: NewBlog},
+    {path: '/admin/Blog/Modification/:id', component: NewBlog},
+    {path: '/admin/Slider', component: Slider},
+    {path: '/admin/transactions', component: Accounting},
+    {path: '/admin/user-page', component: UserPage},
+    {path: '/admin/404', component: PageNotFound}
 ]

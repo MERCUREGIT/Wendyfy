@@ -355,7 +355,7 @@ export default {
             data.cover=d.data;
             axios.put(`${config.server}/blog/${this.$route.params.id}`, data, {headers: {...config.headers}}).then(() => {
               toast("Blog modifie avec sucess")
-              this.$router.push('/Blog');
+              this.$router.push('/admin/Blog');
             }).catch((error) => {
               toast("Erreur de connexion")
               console.log(error);
@@ -371,7 +371,7 @@ export default {
           //pas besoin
           axios.put(`${config.server}/blog/${this.$route.params.id}`, data, {headers: {...config.headers}}).then(() => {
             toast("Blog modifie avec sucess")
-            this.$router.push('/Blog');
+            this.$router.push('/admin/Blog');
           }).catch((error) => {
             toast("Erreur de connexion")
             console.log(error);
@@ -387,7 +387,7 @@ export default {
         data.cover=d.data;
         axios.post(`${config.server}/blog`, data, {headers: {...config.headers}}).then(() => {
           toast("Blog cree avec sucess")
-          this.$router.push('/Blog');
+          this.$router.push('/admin/Blog');
         }).catch((error) => {
           toast("Erreur de connexion")
           console.log(error);

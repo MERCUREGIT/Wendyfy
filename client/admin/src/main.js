@@ -31,14 +31,14 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   let ls = localStorage.getItem('isAdmin');
   let token = localStorage.getItem('token');
-  if(from.path === '/' && to.path === "/"){
+  if(from.path === '/admin' && to.path === "/admin"){
     next();
   }
   else if(ls===true || typeof token === 'string'){
      next();
   }
   else if(ls === null || ls === false || typeof token === 'string') {
-    if(to.path === '/404'){ next()}
+    if(to.path === '/admin/404'){ next()}
     else {
       next('/'); }
   }
