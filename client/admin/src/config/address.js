@@ -1,4 +1,4 @@
-process.env.NODE_ENV = "production";
+// process.env.NODE_ENV = "production";
 let env = process.env.NODE_ENV || 'development';
 let server ="";
 
@@ -7,7 +7,7 @@ if (env === 'development') {
 }
 else
 {
-    server= "https://wendyfy.com/api"
+    server= "/api"
  }
 
  export default {
